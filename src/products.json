@@ -1,0 +1,92 @@
+[
+     {
+          "id": 1,
+          "title": "bolígrafo",
+          "description": "negro, tinta azul",
+          "price": 25,
+          "thumbnail": "thumbnail",
+          "stock": 100,
+          "code": 88
+     },
+     {
+          "id": 2,
+          "title": "calculadora",
+          "description": "modelo comun",
+          "price": 250,
+          "thumbnail": "thumbnail",
+          "stock": 5,
+          "code": 23
+     },
+     {
+          "id": 3,
+          "title": "mochila",
+          "description": "negra, resistente al agua",
+          "price": 1000,
+          "thumbnail": "thumbnail",
+          "stock": 5,
+          "code": 45
+     },
+     {
+          "id": 4,
+          "title": "cartuchera",
+          "description": "violeta, 2 pisos",
+          "price": 450,
+          "thumbnail": "thumbnail",
+          "stock": 16,
+          "code": 95
+     },
+     {
+          "id": 5,
+          "title": "cuaderno",
+          "description": "rayado, tapa dura",
+          "price": 120,
+          "thumbnail": "thumbnail",
+          "stock": 20,
+          "code": 12
+     },
+     {
+          "id": 6,
+          "title": "lapicera",
+          "description": "azul, punta fina",
+          "price": 50,
+          "thumbnail": "thumbnail",
+          "stock": 30,
+          "code": 34
+     },
+     {
+          "id": 7,
+          "title": "regla",
+          "description": "30 cm, transparente",
+          "price": 80,
+          "thumbnail": "thumbnail",
+          "stock": 10,
+          "code": 78
+     },
+     {
+          "id": 8,
+          "title": "borrador",
+          "description": "blanco, rectangular",
+          "price": 30,
+          "thumbnail": "thumbnail",
+          "stock": 25,
+          "code": 56
+     },
+     {
+          "id": 9,
+          "title": "tijeras",
+          "description": "acero inoxidable, punta redonda",
+          "price": 150,
+          "thumbnail": "thumbnail",
+          "stock": 8,
+          "code": 43
+     },
+     {
+          "id": 10,
+          "title": "papel",
+          "description": "A4, 80gsm",
+          "price": 200,
+          "thumbnail": "thumbnail",
+          "stock": 50,
+          "code": 67
+     }
+]
