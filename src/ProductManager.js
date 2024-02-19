@@ -35,36 +35,36 @@ class ProductManager {
 
     async updateProduct(idProduct, datos = {}) {
         try {
-        let propiedadesValidasProduct = ["title", "description", "price", "thumbnail", "stock", "code"]
+            let propiedadesValidasProduct = ["title", "description", "price", "thumbnail", "stock", "code"]
 
-        let propiedadesQueQuieroModificar = Object.keys(datos)
+            let propiedadesQueQuieroModificar = Object.keys(datos)
 
-        let ok = propiedadesQueQuieroModificar.every(prop => propiedadesValidasProduct.includes(prop))
+            let ok = propiedadesQueQuieroModificar.every(prop => propiedadesValidasProduct.includes(prop))
 
-        if (!ok) {
-            return "Está intentando ingresar un dato erroneo!"
-        }
+            if (!ok) {
+                return "Está intentando ingresar un dato erroneo!"
+            }
 
-        const products = await this.getProducts();
-        const indiceProduct = products.findIndex(p => p.id == idProduct);
+            const products = await this.getProducts();
+            const indiceProduct = products.findIndex(p => p.id == idProduct);
 
-        if (indiceProduct === -1) {
-            return "Este producto no existe"
-        }
+            if (indiceProduct === -1) {
+                return "Este producto no existe"
+            }
 
-        const updatedProduct = {
-            ...products[indiceProduct],
-            ...datos,
-            id: idProduct
-        };
-        
-        products[indiceProduct] = updatedProduct;
+            const updatedProduct = {
+                ...products[indiceProduct],
+                ...datos,
+                id: idProduct
+            };
+            
+            products[indiceProduct] = updatedProduct;
 
-        await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
-        return "Producto modificado correctamente";
+            await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
+            return "Producto modificado correctamente";
 
         } catch (error) {
-            return error.message;
+            throw new Error(error.message);
         }
     }
 
@@ -80,7 +80,7 @@ class ProductManager {
             await fs.promises.writeFile(this.path, JSON.stringify(filteredProducts, null, 5));
             return "Producto eliminado correctamente";
         } catch (error) {
-            return error.message;
+            throw new Error(error.message);
         }
     }
 
@@ -93,7 +93,7 @@ class ProductManager {
                 return [];
             }
         } catch (error) {
-            return error.message;
+            throw new Error(error.message);
         }
     }
 
@@ -104,7 +104,7 @@ class ProductManager {
 
             return product ? product : -1;
         } catch (error) {
-            return error.message;
+            throw new Error(error.message);
         }
     }
 }
