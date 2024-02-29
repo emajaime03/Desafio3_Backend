@@ -1,4 +1,4 @@
-const fs = require("fs")
+import fs from 'fs';
 
 class ProductManager {
 
@@ -6,16 +6,16 @@ class ProductManager {
         this.path = ruta;
     }
 
-    async addProduct(title, description, price, thumbnail, stock, code) {
+    async addProduct(title, description, price, thumbnail = [], stock, code, status = true) {
         try {
             const products = await this.getProducts();
 
-            if (!title || !description || !price || !thumbnail || !stock || !code) {
-                return "Debe completar todos los campos para agregar"
+            if (!title || !description || !price || !stock || !code) {
+                throw new Error("Debe completar todos los campos para agregar") 
             }
 
             if (products.some(product => product.code === code)) {
-                return "Ya existe un producto con este código"
+                throw new Error("Ya existe un producto con este código")
             }
 
             let id = 1
@@ -23,33 +23,39 @@ class ProductManager {
                 id = products[products.length - 1].id + 1
             }
 
-            const newProduct = { id, title, description, price, thumbnail, stock, code };
+            const newProduct = { id, title, description, price, thumbnail, stock, code, status };
             products.push(newProduct);
 
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
             return "Producto agregado correctamente";
         } catch (error) {
-            return error.message;
+            throw new Error(error.message);
         }
     }
 
     async updateProduct(idProduct, datos = {}) {
         try {
-            let propiedadesValidasProduct = ["title", "description", "price", "thumbnail", "stock", "code"]
+
+            idProduct = Number(idProduct);
+            if (isNaN(idProduct)) {
+                throw new Error("El ID del producto debe ser un número");
+            }
+
+            let propiedadesValidasProduct = ["title", "description", "price", "thumbnail", "stock", "code", "status"]
 
             let propiedadesQueQuieroModificar = Object.keys(datos)
 
             let ok = propiedadesQueQuieroModificar.every(prop => propiedadesValidasProduct.includes(prop))
 
             if (!ok) {
-                return "Está intentando ingresar un dato erroneo!"
+                throw new Error("Está intentando ingresar un dato erroneo!")
             }
 
             const products = await this.getProducts();
             const indiceProduct = products.findIndex(p => p.id == idProduct);
 
             if (indiceProduct === -1) {
-                return "Este producto no existe"
+                throw new Error("Este producto no existe")
             }
 
             const updatedProduct = {
@@ -61,7 +67,8 @@ class ProductManager {
             products[indiceProduct] = updatedProduct;
 
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
-            return "Producto modificado correctamente";
+            
+            return "Producto actualizado correctamente";
 
         } catch (error) {
             throw new Error(error.message);
@@ -70,11 +77,17 @@ class ProductManager {
 
     async deleteProduct(idProduct) {
         try {
+
+            idProduct = Number(idProduct);
+            if (isNaN(idProduct)) {
+                throw new Error("El ID del producto debe ser un número");
+            }
+
             let products = await this.getProducts();
             let filteredProducts = products.filter(product => product.id !== idProduct);
     
             if (filteredProducts.length === products.length) {
-                return "No se encontró ningún producto con ese ID";
+                throw new Error("No se encontró ningún producto con ese ID");
             }
     
             await fs.promises.writeFile(this.path, JSON.stringify(filteredProducts, null, 5));
@@ -99,14 +112,24 @@ class ProductManager {
 
     async getProductById(id) {
         try {
+
+            id = Number(id);
+            if (isNaN(id)) {
+                throw new Error("El ID del producto debe ser un número");
+            }
+
             const products = await this.getProducts();
             const product = products.find(p => p.id == id);
 
-            return product ? product : -1;
+            if (product) {
+                return product;            
+            } else {
+                throw new Error("No se encontró ningún producto con ese ID");
+            }
         } catch (error) {
             throw new Error(error.message);
         }
     }
 }
 
-module.exports = ProductManager
+export default ProductManager;

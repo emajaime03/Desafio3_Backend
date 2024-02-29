@@ -6,34 +6,38 @@
           "price": 25,
           "thumbnail": "thumbnail",
           "stock": 100,
-          "code": 88
+          "code": 88,
+          "status": true
      },
      {
           "id": 2,
-          "title": "calculadora",
-          "description": "modelo comun",
-          "price": 250,
-          "thumbnail": "thumbnail",
-          "stock": 5,
-          "code": 23
+          "title": "Producto milanesa",
+          "description": "Descripción del producto",
+          "price": 19.99,
+          "thumbnail": "https://ejemplo.com/imagen.jpg",
+          "stock": 10,
+          "code": 1234,
+          "status": true
      },
      {
-          "id": 3,
-          "title": "mochila",
-          "description": "negra, resistente al agua",
-          "price": 1000,
-          "thumbnail": "thumbnail",
-          "stock": 5,
-          "code": 45
+          "id": 2,
+          "title": "Lechuga",
+          "description": "Verde como el pasto",
+          "price": 34,
+          "thumbnail": "x",
+          "stock": 45,
+          "code": 839,
+          "status": true
      },
      {
           "id": 4,
-          "title": "cartuchera",
+          "title": "productosote",
           "description": "violeta, 2 pisos",
           "price": 450,
           "thumbnail": "thumbnail",
           "stock": 16,
-          "code": 95
+          "code": 95,
+          "status": true
      },
      {
           "id": 5,
@@ -42,7 +46,8 @@
           "price": 120,
           "thumbnail": "thumbnail",
           "stock": 20,
-          "code": 12
+          "code": 12,
+          "status": true
      },
      {
           "id": 6,
@@ -51,7 +56,8 @@
           "price": 50,
           "thumbnail": "thumbnail",
           "stock": 30,
-          "code": 34
+          "code": 34,
+          "status": true
      },
      {
           "id": 7,
@@ -60,7 +66,8 @@
           "price": 80,
           "thumbnail": "thumbnail",
           "stock": 10,
-          "code": 78
+          "code": 78,
+          "status": true
      },
      {
           "id": 8,
@@ -69,7 +76,8 @@
           "price": 30,
           "thumbnail": "thumbnail",
           "stock": 25,
-          "code": 56
+          "code": 56,
+          "status": true
      },
      {
           "id": 9,
@@ -78,7 +86,8 @@
           "price": 150,
           "thumbnail": "thumbnail",
           "stock": 8,
-          "code": 43
+          "code": 43,
+          "status": true
      },
      {
           "id": 10,
@@ -87,6 +96,17 @@
           "price": 200,
           "thumbnail": "thumbnail",
           "stock": 50,
-          "code": 67
+          "code": 67,
+          "status": true
+     },
+     {
+          "id": 11,
+          "title": "Producto ejemplo",
+          "description": "Descripción del producto",
+          "price": 19.99,
+          "thumbnail": "https://ejemplo.com/imagen.jpg",
+          "stock": 10,
+          "code": 123,
+          "status": true
      }
 ]

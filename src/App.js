@@ -1,58 +1,26 @@
-const express = require("express");
-const ProductManager = require("./ProductManager.js")
+import express from 'express';
+import { router as productsRouter } from './routes/products.router.js';
+import { router as cartsRouter } from './routes/carts.router.js';
 
 const port = 8080
 
 const app = express()
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 app.get("/", (req, res) => {
     res.send("Bienvenido a la tienda de productos")
 })
 
-app.get("/products", async (req, res) => {
-    try {
-        const productManager = new ProductManager(__dirname + "/products.json");
-        let products = await productManager.getProducts()
+app.use("/api/products", productsRouter)
 
-        let {limit} = req.query
-
-        if (limit && limit > 0) {
-            products = products.slice(0, limit)            
-        }
-
-        res.send(products);
-    } catch (error) {
-        res.send(error.message);
-    }
-})
-
-app.get("/products/:pid", async (req, res) => {
-    try {
-        const productManager = new ProductManager(__dirname + "/products.json");
-
-        let {pid: pid} = req.params
-        pid = Number(pid)
-
-        if (isNaN(pid)) {
-            return res.send("Error: el ID del producto debe ser un número")        
-        }
-
-        const product = await productManager.getProductById(pid)
-
-        if (product === -1) {
-            res.send(`Error: no se encontró ningún producto con el ID ${pid}` )
-        } else {
-            res.send(product);
-        }
-    } catch (error) {
-        res.send(error.message);
-    }
-})
+app.use("/api/carts", cartsRouter)
 
 app.get("*", (req, res) => {
     res.send("Error 404 - Not Found")
 })
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log("Servidor corriendo en el puerto", port)
 })
