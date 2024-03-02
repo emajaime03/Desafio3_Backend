@@ -40,7 +40,9 @@ router.post("/", async (req, res) => {
     try {
         const productManager = new ProductManager(ruta);
         
-        let respuesta = await productManager.addProduct(req.body)
+        const { title, description, code, price, stock, thumbnail, category, status} = req.body
+
+        let respuesta = await productManager.addProduct(title, description, price, thumbnail, stock,  category, code, status)
 
         res.send(respuesta);
     } catch (error) {

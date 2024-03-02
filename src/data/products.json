@@ -1,40 +1,40 @@
 [
      {
           "id": 1,
-          "title": "bolígrafo",
+          "title": "boligrafo",
           "description": "negro, tinta azul",
           "price": 25,
-          "thumbnail": "thumbnail",
+          "thumbnail": [],
           "stock": 100,
           "code": 88,
           "status": true
      },
      {
           "id": 2,
-          "title": "Producto milanesa",
-          "description": "Descripción del producto",
+          "title": "bolsa",
+          "description": "grande, de plástico",
           "price": 19.99,
-          "thumbnail": "https://ejemplo.com/imagen.jpg",
+          "thumbnail": [],
           "stock": 10,
           "code": 1234,
           "status": true
      },
      {
-          "id": 2,
+          "id": 3,
           "title": "Lechuga",
           "description": "Verde como el pasto",
           "price": 34,
-          "thumbnail": "x",
+          "thumbnail": [],
           "stock": 45,
           "code": 839,
           "status": true
      },
      {
           "id": 4,
-          "title": "productosote",
+          "title": "cartuchera",
           "description": "violeta, 2 pisos",
           "price": 450,
-          "thumbnail": "thumbnail",
+          "thumbnail": [],
           "stock": 16,
           "code": 95,
           "status": true
@@ -44,7 +44,7 @@
           "title": "cuaderno",
           "description": "rayado, tapa dura",
           "price": 120,
-          "thumbnail": "thumbnail",
+          "thumbnail": [],
           "stock": 20,
           "code": 12,
           "status": true
@@ -54,7 +54,7 @@
           "title": "lapicera",
           "description": "azul, punta fina",
           "price": 50,
-          "thumbnail": "thumbnail",
+          "thumbnail": [],
           "stock": 30,
           "code": 34,
           "status": true
@@ -64,7 +64,7 @@
           "title": "regla",
           "description": "30 cm, transparente",
           "price": 80,
-          "thumbnail": "thumbnail",
+          "thumbnail": [],
           "stock": 10,
           "code": 78,
           "status": true
@@ -74,7 +74,7 @@
           "title": "borrador",
           "description": "blanco, rectangular",
           "price": 30,
-          "thumbnail": "thumbnail",
+          "thumbnail": [],
           "stock": 25,
           "code": 56,
           "status": true
@@ -84,7 +84,7 @@
           "title": "tijeras",
           "description": "acero inoxidable, punta redonda",
           "price": 150,
-          "thumbnail": "thumbnail",
+          "thumbnail": [],
           "stock": 8,
           "code": 43,
           "status": true
@@ -94,19 +94,24 @@
           "title": "papel",
           "description": "A4, 80gsm",
           "price": 200,
-          "thumbnail": "thumbnail",
+          "thumbnail": [],
           "stock": 50,
           "code": 67,
           "status": true
      },
      {
           "id": 11,
-          "title": "Producto ejemplo",
-          "description": "Descripción del producto",
-          "price": 19.99,
-          "thumbnail": "https://ejemplo.com/imagen.jpg",
-          "stock": 10,
-          "code": 123,
+          "title": "Crocs",
+          "description": "para los pies, comodas",
+          "price": 8944,
+          "thumbnail": [
+               "ruta1",
+               "ruta2",
+               "ruta3"
+          ],
+          "stock": 25,
+          "code": 454,
+          "category": "producto",
           "status": true
      }
 ]

@@ -6,12 +6,15 @@ class ProductManager {
         this.path = ruta;
     }
 
-    async addProduct(title, description, price, thumbnail = [], stock, code, status = true) {
+    async addProduct(title, description, price, thumbnail = [], stock, category, code, status = true) {
         try {
             const products = await this.getProducts();
 
-            if (!title || !description || !price || !stock || !code) {
+            if (!title || !description || !price || !category || !stock || !code) {
                 throw new Error("Debe completar todos los campos para agregar") 
+            }
+            else if (typeof title !== "string" || typeof description !== "string" || typeof category !== "string" || typeof code !== "number" || typeof price !== "number" || typeof stock !== "number" || typeof status !== "boolean" || !Array.isArray(thumbnail)) {
+                throw new Error("Los tipos de datos ingresados no son correctos")
             }
 
             if (products.some(product => product.code === code)) {
@@ -22,12 +25,13 @@ class ProductManager {
             if (products.length > 0) {
                 id = products[products.length - 1].id + 1
             }
-
-            const newProduct = { id, title, description, price, thumbnail, stock, code, status };
+    
+            const newProduct = { id, title, description, price, thumbnail: Array.isArray(products) ? thumbnail : [], stock, code, category, status };
             products.push(newProduct);
-
+    
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
             return "Producto agregado correctamente";
+            
         } catch (error) {
             throw new Error(error.message);
         }
@@ -35,6 +39,7 @@ class ProductManager {
 
     async updateProduct(idProduct, datos = {}) {
         try {
+            const products = await this.getProducts();
 
             idProduct = Number(idProduct);
             if (isNaN(idProduct)) {
@@ -51,7 +56,12 @@ class ProductManager {
                 throw new Error("Está intentando ingresar un dato erroneo!")
             }
 
-            const products = await this.getProducts();
+            if (datos.code) {                
+                if (products.some(product => product.code === datos.code && product.id !== idProduct)) {
+                    throw new Error("Ya existe un producto con este código")
+                }
+            }
+            
             const indiceProduct = products.findIndex(p => p.id == idProduct);
 
             if (indiceProduct === -1) {
