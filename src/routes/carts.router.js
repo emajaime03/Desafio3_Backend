@@ -1,16 +1,14 @@
 import { Router } from 'express';
 import path from 'path';
-import CartManager from '../CartManager.js';
-import ProductManager from '../ProductManager.js';
-import __dirname from '../utils.js';
+import CartManager from '../classes/CartManager.js';
+import ProductManager from '../classes/ProductManager.js';
+import { rutaCarritos, rutaProductos } from '../utils.js';
 
 export const router = Router();
 
-let ruta = path.join(__dirname, 'data', 'carrito.json');
-
 router.get("/:cid", async (req, res) => {
     try {
-        const cartManager = new CartManager(ruta);
+        const cartManager = new CartManager(rutaCarritos);
         
         const products = await cartManager.getProductsById(req.params.cid)
 
@@ -22,8 +20,7 @@ router.get("/:cid", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const cartManager = new CartManager(ruta);        
-        const rutaProductos = path.join(__dirname, 'data', 'products.json');
+        const cartManager = new CartManager(rutaCarritos);
         const productManager = new ProductManager(rutaProductos);
         
         let respuesta = ""
@@ -44,8 +41,7 @@ router.post("/", async (req, res) => {
 
 router.post("/:cid/product/:pid", async (req, res) => {
     try {
-        const cartManager = new CartManager(ruta);
-        const rutaProductos = path.join(__dirname, 'data', 'products.json');
+        const cartManager = new CartManager(rutaCarritos);
         const productManager = new ProductManager(rutaProductos);
         
         await productManager.getProductById(req.params.pid)

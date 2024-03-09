@@ -1,5 +1,5 @@
 {
-  "name": "desafio_3",
+  "name": "proyecto_backend",
   "version": "1.0.0",
   "type": "module",
   "description": "Servidor con Express",
@@ -10,6 +10,8 @@
   "author": "Emanuel Jaime",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "express-handlebars": "^7.1.2",
+    "socket.io": "^4.7.4"
   }
 }

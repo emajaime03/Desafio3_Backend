@@ -113,5 +113,196 @@
           "code": 454,
           "category": "producto",
           "status": true
+     },
+     {
+          "id": 12,
+          "title": "guantes",
+          "description": "para las manos",
+          "price": 8944,
+          "thumbnail": [
+               "ruta1",
+               "ruta2",
+               "ruta3"
+          ],
+          "stock": 25,
+          "code": 343,
+          "category": "producto",
+          "status": true
+     },
+     {
+          "id": 13,
+          "title": "manija",
+          "description": "grande",
+          "price": "345",
+          "thumbnail": "milanesa",
+          "stock": "10",
+          "code": "123",
+          "category": "product",
+          "status": ""
+     },
+     {
+          "id": 14,
+          "title": "hola",
+          "description": "manzana",
+          "price": "234",
+          "thumbnail": "",
+          "stock": "10",
+          "code": "45654",
+          "category": "productd",
+          "status": ""
+     },
+     {
+          "id": 15,
+          "title": "ketchup",
+          "description": "grande",
+          "price": 123,
+          "thumbnail": [],
+          "stock": 30,
+          "code": 3728,
+          "category": "product",
+          "status": true
+     },
+     {
+          "id": 16,
+          "title": "aa",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 3456,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 17,
+          "title": "bbbb",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 43534,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 18,
+          "title": "cccc",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 3455,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 19,
+          "title": "ddddd",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 57867,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 20,
+          "title": "eeee",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 8654,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 21,
+          "title": "ffff",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 86546554,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 22,
+          "title": "gggg",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 3452,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 23,
+          "title": "hhhhh",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 3345452,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 24,
+          "title": "iiii",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 4566,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 25,
+          "title": "jjjjj",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 6767,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 26,
+          "title": "kkkkk",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 675676,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 27,
+          "title": "ttttt",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 45656,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 28,
+          "title": "aaaaa",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 56567,
+          "category": "gdfg",
+          "status": true
      }
 ]

@@ -13,9 +13,6 @@ class ProductManager {
             if (!title || !description || !price || !category || !stock || !code) {
                 throw new Error("Debe completar todos los campos para agregar") 
             }
-            else if (typeof title !== "string" || typeof description !== "string" || typeof category !== "string" || typeof code !== "number" || typeof price !== "number" || typeof stock !== "number" || typeof status !== "boolean" || !Array.isArray(thumbnail)) {
-                throw new Error("Los tipos de datos ingresados no son correctos")
-            }
 
             if (products.some(product => product.code === code)) {
                 throw new Error("Ya existe un producto con este código")
@@ -30,7 +27,7 @@ class ProductManager {
             products.push(newProduct);
     
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
-            return "Producto agregado correctamente";
+            return newProduct;
             
         } catch (error) {
             throw new Error(error.message);
