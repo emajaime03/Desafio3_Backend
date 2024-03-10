@@ -40,14 +40,4 @@ io = new Server(serverHttp)
 
 io.on('connection', (socket) => {
     io.emit("saludo", "Hola desde el servidor")
-
-    socket.on('addProduct', (product) => {
-        
-        io.emit('productAdded', product);
-    });
-
-    socket.on('deleteProduct', (productId) => {
-
-        io.emit('productDeleted', productId);
-    });
 });

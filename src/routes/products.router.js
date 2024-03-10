@@ -35,11 +35,11 @@ router.post("/", async (req, res) => {
     try {
         const { title, description, code, price, stock, thumbnail, category, status} = req.body
 
-        let newProduct = await productManager.addProduct(title, description, price, thumbnail, stock,  category, code, status)
+        let respuesta = await productManager.addProduct(title, description, price, thumbnail, stock,  category, code, status)
 
-        req.io.emit("newProduct", newProduct)
+        req.io.emit("addProduct", respuesta)
         res.setHeader('Content-Type','application/json')
-        res.status(201).json({newProduct})
+        res.status(201).json(respuesta)
         
     } catch (error) {
         res.send(error.message);
@@ -64,7 +64,9 @@ router.delete("/:pid", async (req, res) => {
 
         const respuesta = await productManager.deleteProduct(req.params.pid)
 
-        res.send(respuesta);
+        req.io.emit("deleteProduct", respuesta)
+        res.setHeader('Content-Type','application/json')
+        res.status(201).json(respuesta)
     } catch (error) {
         res.send(error.message);
     }

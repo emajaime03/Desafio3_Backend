@@ -1,35 +1,5 @@
 [
      {
-          "id": 1,
-          "title": "boligrafo",
-          "description": "negro, tinta azul",
-          "price": 25,
-          "thumbnail": [],
-          "stock": 100,
-          "code": 88,
-          "status": true
-     },
-     {
-          "id": 2,
-          "title": "bolsa",
-          "description": "grande, de plástico",
-          "price": 19.99,
-          "thumbnail": [],
-          "stock": 10,
-          "code": 1234,
-          "status": true
-     },
-     {
-          "id": 3,
-          "title": "Lechuga",
-          "description": "Verde como el pasto",
-          "price": 34,
-          "thumbnail": [],
-          "stock": 45,
-          "code": 839,
-          "status": true
-     },
-     {
           "id": 4,
           "title": "cartuchera",
           "description": "violeta, 2 pisos",
@@ -37,16 +7,6 @@
           "thumbnail": [],
           "stock": 16,
           "code": 95,
-          "status": true
-     },
-     {
-          "id": 5,
-          "title": "cuaderno",
-          "description": "rayado, tapa dura",
-          "price": 120,
-          "thumbnail": [],
-          "stock": 20,
-          "code": 12,
           "status": true
      },
      {
@@ -131,177 +91,78 @@
      },
      {
           "id": 13,
-          "title": "manija",
-          "description": "grande",
-          "price": "345",
-          "thumbnail": "milanesa",
-          "stock": "10",
-          "code": "123",
-          "category": "product",
-          "status": ""
-     },
-     {
-          "id": 14,
-          "title": "hola",
-          "description": "manzana",
-          "price": "234",
-          "thumbnail": "",
-          "stock": "10",
-          "code": "45654",
-          "category": "productd",
-          "status": ""
-     },
-     {
-          "id": 15,
-          "title": "ketchup",
-          "description": "grande",
-          "price": 123,
-          "thumbnail": [],
-          "stock": 30,
-          "code": 3728,
-          "category": "product",
-          "status": true
-     },
-     {
-          "id": 16,
-          "title": "aa",
+          "title": "aaaaaaaa",
           "description": "fgs",
           "price": 154523,
           "thumbnail": [],
           "stock": 34,
-          "code": 3456,
+          "code": 3738437,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 14,
+          "title": "bbbbbb",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 47485,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 15,
+          "title": "cccccc",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 37283,
+          "category": "gdfg",
+          "status": true
+     },
+     {
+          "id": 16,
+          "title": "ddddddd",
+          "description": "fgs",
+          "price": 154523,
+          "thumbnail": [],
+          "stock": 34,
+          "code": 564574,
           "category": "gdfg",
           "status": true
      },
      {
           "id": 17,
-          "title": "bbbb",
+          "title": "eeeeee",
           "description": "fgs",
           "price": 154523,
           "thumbnail": [],
           "stock": 34,
-          "code": 43534,
+          "code": 37374,
           "category": "gdfg",
           "status": true
      },
      {
           "id": 18,
-          "title": "cccc",
+          "title": "fffff",
           "description": "fgs",
           "price": 154523,
           "thumbnail": [],
           "stock": 34,
-          "code": 3455,
+          "code": 494958,
           "category": "gdfg",
           "status": true
      },
      {
           "id": 19,
-          "title": "ddddd",
+          "title": "ggggg",
           "description": "fgs",
           "price": 154523,
           "thumbnail": [],
           "stock": 34,
-          "code": 57867,
-          "category": "gdfg",
-          "status": true
-     },
-     {
-          "id": 20,
-          "title": "eeee",
-          "description": "fgs",
-          "price": 154523,
-          "thumbnail": [],
-          "stock": 34,
-          "code": 8654,
-          "category": "gdfg",
-          "status": true
-     },
-     {
-          "id": 21,
-          "title": "ffff",
-          "description": "fgs",
-          "price": 154523,
-          "thumbnail": [],
-          "stock": 34,
-          "code": 86546554,
-          "category": "gdfg",
-          "status": true
-     },
-     {
-          "id": 22,
-          "title": "gggg",
-          "description": "fgs",
-          "price": 154523,
-          "thumbnail": [],
-          "stock": 34,
-          "code": 3452,
-          "category": "gdfg",
-          "status": true
-     },
-     {
-          "id": 23,
-          "title": "hhhhh",
-          "description": "fgs",
-          "price": 154523,
-          "thumbnail": [],
-          "stock": 34,
-          "code": 3345452,
-          "category": "gdfg",
-          "status": true
-     },
-     {
-          "id": 24,
-          "title": "iiii",
-          "description": "fgs",
-          "price": 154523,
-          "thumbnail": [],
-          "stock": 34,
-          "code": 4566,
-          "category": "gdfg",
-          "status": true
-     },
-     {
-          "id": 25,
-          "title": "jjjjj",
-          "description": "fgs",
-          "price": 154523,
-          "thumbnail": [],
-          "stock": 34,
-          "code": 6767,
-          "category": "gdfg",
-          "status": true
-     },
-     {
-          "id": 26,
-          "title": "kkkkk",
-          "description": "fgs",
-          "price": 154523,
-          "thumbnail": [],
-          "stock": 34,
-          "code": 675676,
-          "category": "gdfg",
-          "status": true
-     },
-     {
-          "id": 27,
-          "title": "ttttt",
-          "description": "fgs",
-          "price": 154523,
-          "thumbnail": [],
-          "stock": 34,
-          "code": 45656,
-          "category": "gdfg",
-          "status": true
-     },
-     {
-          "id": 28,
-          "title": "aaaaa",
-          "description": "fgs",
-          "price": 154523,
-          "thumbnail": [],
-          "stock": 34,
-          "code": 56567,
+          "code": 48749,
           "category": "gdfg",
           "status": true
      }

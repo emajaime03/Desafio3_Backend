@@ -11,11 +11,11 @@ class ProductManager {
             const products = await this.getProducts();
 
             if (!title || !description || !price || !category || !stock || !code) {
-                throw new Error("Debe completar todos los campos para agregar") 
+                return false
             }
 
             if (products.some(product => product.code === code)) {
-                throw new Error("Ya existe un producto con este código")
+                return false
             }
 
             let id = 1
@@ -27,7 +27,7 @@ class ProductManager {
             products.push(newProduct);
     
             await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
-            return newProduct;
+            return true;
             
         } catch (error) {
             throw new Error(error.message);
@@ -87,18 +87,18 @@ class ProductManager {
 
             idProduct = Number(idProduct);
             if (isNaN(idProduct)) {
-                throw new Error("El ID del producto debe ser un número");
+                return false
             }
 
             let products = await this.getProducts();
             let filteredProducts = products.filter(product => product.id !== idProduct);
     
             if (filteredProducts.length === products.length) {
-                throw new Error("No se encontró ningún producto con ese ID");
+                return false
             }
     
             await fs.promises.writeFile(this.path, JSON.stringify(filteredProducts, null, 5));
-            return "Producto eliminado correctamente";
+            return true;
         } catch (error) {
             throw new Error(error.message);
         }
