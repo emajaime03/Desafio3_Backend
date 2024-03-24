@@ -8,3 +8,7 @@ router.get("/", async (req, res) => {
 router.get("/realTimeProducts", async (req, res) => {  
     res.render("realTimeProducts");
 });
+
+router.get('/chat', async (req,res)=>{
+    res.status(200).render('chat')
+})

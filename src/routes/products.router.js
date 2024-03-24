@@ -1,12 +1,11 @@
 import { Router } from 'express';
-import ProductManager from '../classes/ProductManager.js';
-import { rutaProductos } from '../utils.js';
+import { ProductsManager } from '../dao/ProductsManagerMongo.js';
 export const router = Router();
-const productManager = new ProductManager(rutaProductos);
+const productosManager = new ProductsManager();
 
 router.get("/", async(req, res) => {
     try {
-        let products = await productManager.getProducts()
+        let products = await productosManager.getProducts()
 
         let {limit} = req.query
 
@@ -23,7 +22,7 @@ router.get("/", async(req, res) => {
 
 router.get("/:pid", async (req, res) => {
     try {        
-        const product = await productManager.getProductById(req.params.pid)
+        const product = await productosManager.getProductById(req.params.pid)
 
         res.send(product);
     } catch (error) {
@@ -33,9 +32,9 @@ router.get("/:pid", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const { title, description, code, price, stock, thumbnail, category, status} = req.body
+        const product = req.body.product
 
-        let respuesta = await productManager.addProduct(title, description, price, thumbnail, stock,  category, code, status)
+        let respuesta = await productosManager.addProduct(product)
 
         req.io.emit("addProduct", respuesta)
         res.setHeader('Content-Type','application/json')
@@ -48,9 +47,7 @@ router.post("/", async (req, res) => {
 
 router.put("/:pid", async (req, res) => {
     try {
-        const productManager = new ProductManager(rutaProductos);
-
-        const respuesta = await productManager.updateProduct(req.params.pid, req.body)
+        const respuesta = await productosManager.updateProduct(req.params.pid, req.body.producto)
 
         res.send(respuesta);
     } catch (error) {
@@ -60,9 +57,7 @@ router.put("/:pid", async (req, res) => {
 
 router.delete("/:pid", async (req, res) => {
     try {
-        const productManager = new ProductManager(rutaProductos);
-
-        const respuesta = await productManager.deleteProduct(req.params.pid)
+        const respuesta = await productosManager.deleteProduct(req.params.pid)
 
         req.io.emit("deleteProduct", respuesta)
         res.setHeader('Content-Type','application/json')

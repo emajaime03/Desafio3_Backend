@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-class ProductManager {
+class ProductosManager {
 
     constructor(ruta) {
         this.path = ruta;
@@ -139,4 +139,4 @@ class ProductManager {
     }
 }
 
-export default ProductManager;
+export default ProductosManager;

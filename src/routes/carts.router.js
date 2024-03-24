@@ -1,15 +1,13 @@
 import { Router } from 'express';
-import path from 'path';
-import CartManager from '../classes/CartManager.js';
-import ProductManager from '../classes/ProductManager.js';
-import { rutaCarritos, rutaProductos } from '../utils.js';
+import CartManager from '../dao/CartsManagerMongo.js';
+import ProductsManager from '../dao/ProductsManagerMongo.js';
+import { cartsRoute, productsRoute } from '../utils.js';
 
 export const router = Router();
+const cartManager = new CartManager(cartsRoute);
 
 router.get("/:cid", async (req, res) => {
     try {
-        const cartManager = new CartManager(rutaCarritos);
-        
         const products = await cartManager.getProductsById(req.params.cid)
 
         res.send(products);
@@ -20,13 +18,12 @@ router.get("/:cid", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const cartManager = new CartManager(rutaCarritos);
-        const productManager = new ProductManager(rutaProductos);
+        const productosManager = new ProductsManager(productsRoute);
         
         let respuesta = ""
         if (req.body.products) {
             for (let i = 0; i < req.body.products.length; i++) {
-                await productManager.getProductById(req.body.products[i].productId)
+                await productosManager.getProductById(req.body.products[i].productId)
             }
             respuesta = await cartManager.createCart(req.body.products)
             res.send(respuesta);
@@ -41,12 +38,11 @@ router.post("/", async (req, res) => {
 
 router.post("/:cid/product/:pid", async (req, res) => {
     try {
-        const cartManager = new CartManager(rutaCarritos);
-        const productManager = new ProductManager(rutaProductos);
+        const productosManager = new ProductsManager(productsRoute);
         
-        await productManager.getProductById(req.params.pid)
+        await productosManager.getProductById(req.params.pid)
 
-        const respuesta = await cartManager.addProduct(req.params.cid, req.params.pid)
+        const respuesta = await cartManager.addProduct(req.params.cid, req.params.pid, req.body.quantity || 1)
 
         res.send(respuesta);
     } catch (error) {
