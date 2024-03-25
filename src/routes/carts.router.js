@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import CartManager from '../dao/CartsManagerMongo.js';
 import ProductsManager from '../dao/ProductsManagerMongo.js';
-import { cartsRoute, productsRoute } from '../utils.js';
 
 export const router = Router();
-const cartManager = new CartManager(cartsRoute);
+const cartManager = new CartManager();
 
 router.get("/:cid", async (req, res) => {
     try {
@@ -18,12 +17,12 @@ router.get("/:cid", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const productosManager = new ProductsManager(productsRoute);
+        const productsManager = new ProductsManager();
         
         let respuesta = ""
         if (req.body.products) {
             for (let i = 0; i < req.body.products.length; i++) {
-                await productosManager.getProductById(req.body.products[i].productId)
+                await productsManager.getProductById(req.body.products[i].productId)
             }
             respuesta = await cartManager.createCart(req.body.products)
             res.send(respuesta);
@@ -38,9 +37,9 @@ router.post("/", async (req, res) => {
 
 router.post("/:cid/product/:pid", async (req, res) => {
     try {
-        const productosManager = new ProductsManager(productsRoute);
+        const productsManager = new ProductsManager();
         
-        await productosManager.getProductById(req.params.pid)
+        await productsManager.getProductById(req.params.pid)
 
         const respuesta = await cartManager.addProduct(req.params.cid, req.params.pid, req.body.quantity || 1)
 
