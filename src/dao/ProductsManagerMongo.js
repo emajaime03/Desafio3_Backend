@@ -2,30 +2,52 @@ import {ProductsModel} from './models/products.modelo.js';
 
 export class ProductsManager {
     
-    async getProducts(limit = 5, page = 1, sort, query) {
+    async getProducts(limit = 5, page = 1, sort = 'desc', query = 'true') {
         try{
+            sort = sort.toString().toLowerCase()
             if (!limit || limit < 1, !page || page < 1) {
                 throw new Error("Limit y Page deben ser números mayores a 0");
             }
 
-            let {
-                status = "error",
-                docs: products,
-                totalPages,
-                prevPage, nextPage,
-                hasPrevPage, hasNextPage
-            } = await ProductsModel.paginate({query}, {limit, page, sort, lean:true});
+            if (query.includes('true') || query.includes('false')) {
+                let {
+                    status = "error",
+                    docs: products,
+                    totalPages,
+                    prevPage, nextPage,
+                    hasPrevPage, hasNextPage
+                } = await ProductsModel.paginate({status: query}, {limit, page, sort: {price: sort}, lean:true});
 
-            status = "success";
-            return {
-                status,
-                totalPages,
-                prevPage,
-                nextPage,
-                hasPrevPage,
-                hasNextPage,
-                products
-            }
+                status = "success";
+                return {
+                    status,
+                    totalPages,
+                    prevPage,
+                    nextPage,
+                    hasPrevPage,
+                    hasNextPage,
+                    products
+                }             
+            } else {
+                let {
+                    status = "error",
+                    docs: products,
+                    totalPages,
+                    prevPage, nextPage,
+                    hasPrevPage, hasNextPage
+                } = await ProductsModel.paginate({category: query}, {limit, page, sort: {price: sort}, lean:true});
+
+                status = "success";
+                return {
+                    status,
+                    totalPages,
+                    prevPage,
+                    nextPage,
+                    hasPrevPage,
+                    hasNextPage,
+                    products
+                }
+            }            
 
         } catch (error) {
             throw new Error(error.message);
