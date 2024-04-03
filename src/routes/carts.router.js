@@ -4,10 +4,11 @@ import ProductsManager from '../dao/ProductsManagerMongo.js';
 
 export const router = Router();
 const cartManager = new CartManager();
+const productsManager = new ProductsManager();
 
 router.get("/:cid", async (req, res) => {
     try {
-        const products = await cartManager.getProductsById(req.params.cid)
+        const products = await cartManager.getCartProductsById(req.params.cid)
 
         res.send(products);
     } catch (error) {
@@ -17,13 +18,13 @@ router.get("/:cid", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const productsManager = new ProductsManager();
-        
         let respuesta = ""
         if (req.body.products) {
-            for (let i = 0; i < req.body.products.length; i++) {
-                await productsManager.getProductById(req.body.products[i].productId)
-            }
+
+            req.body.products.forEach(async product => {
+                await productsManager.getProductById(product.productId)
+            });
+
             respuesta = await cartManager.createCart(req.body.products)
             res.send(respuesta);
         } else {
@@ -37,8 +38,6 @@ router.post("/", async (req, res) => {
 
 router.post("/:cid/product/:pid", async (req, res) => {
     try {
-        const productsManager = new ProductsManager();
-        
         await productsManager.getProductById(req.params.pid)
 
         const respuesta = await cartManager.addProduct(req.params.cid, req.params.pid, req.body.quantity || 1)
@@ -48,5 +47,46 @@ router.post("/:cid/product/:pid", async (req, res) => {
         res.send(error.message);
     }
 })
+
+router.delete("/:cid/product/:pid", async (req, res) => {
+    try {
+        const respuesta = await cartManager.deleteProduct(req.params.cid, req.params.pid)
+
+        res.send(respuesta);
+    } catch (error) {
+        res.send(error.message);
+    }
+})
+
+router.delete("/:cid", async (req, res) => {
+    try {
+        const respuesta = await cartManager.deleteAllProducts(req.params.cid)
+
+        res.send(respuesta);
+    } catch (error) {
+        res.send(error.message);
+    }
+})
+
+router.put("/:cid", async (req, res) => {
+    try {
+        const respuesta = await cartManager.updateCart(req.params.cid, req.body.products)
+
+        res.send(respuesta);
+    } catch (error) {
+        res.send(error.message);
+    }
+});
+
+router.put("/:cid/products/:pid", async (req, res) => {
+    try {
+        const respuesta = await cartManager.addProduct(req.params.cid, req.params.pid, req.body.quantity, true)
+
+        res.send(respuesta);
+    } catch (error) {
+        res.send(error.message);
+    }
+});
+
 
 export default router;

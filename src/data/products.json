@@ -1,66 +1,65 @@
 [
      {
-          "id": 4,
           "title": "cartuchera",
           "description": "violeta, 2 pisos",
           "price": 450,
           "thumbnail": [],
           "stock": 16,
           "code": 95,
+          "category": "producto",
           "status": true
      },
      {
-          "id": 6,
           "title": "lapicera",
           "description": "azul, punta fina",
           "price": 50,
           "thumbnail": [],
           "stock": 30,
           "code": 34,
+          "category": "producto",
           "status": true
      },
      {
-          "id": 7,
           "title": "regla",
           "description": "30 cm, transparente",
           "price": 80,
           "thumbnail": [],
           "stock": 10,
           "code": 78,
+          "category": "producto",
           "status": true
      },
      {
-          "id": 8,
           "title": "borrador",
           "description": "blanco, rectangular",
           "price": 30,
           "thumbnail": [],
           "stock": 25,
           "code": 56,
+          "category": "producto",
           "status": true
      },
      {
-          "id": 9,
           "title": "tijeras",
           "description": "acero inoxidable, punta redonda",
           "price": 150,
           "thumbnail": [],
           "stock": 8,
           "code": 43,
+          "category": "producto",
           "status": true
      },
      {
-          "id": 10,
           "title": "papel",
           "description": "A4, 80gsm",
           "price": 200,
           "thumbnail": [],
           "stock": 50,
           "code": 67,
+          "category": "producto",
           "status": true
      },
      {
-          "id": 11,
           "title": "Crocs",
           "description": "para los pies, comodas",
           "price": 8944,
@@ -75,7 +74,6 @@
           "status": true
      },
      {
-          "id": 12,
           "title": "guantes",
           "description": "para las manos",
           "price": 8944,

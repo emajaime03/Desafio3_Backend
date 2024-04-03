@@ -10,17 +10,12 @@ export class CartsManager {
         }
     }
 
-    async getProductsById(id) {
+    async getCartProductsById(id) {
         try {
-            id = Number(id);
-            if (isNaN(id)) {
-                throw new Error("El ID del carrito debe ser un número");
-            }
-
-            let cart = await CartModel.findOne({id}).lean();
-
+            let cart = await CartModel.findById(id).populate('products.product').lean();
+            
             if (cart) {
-            return cart.products;
+                return cart.products;
             } else {
                 throw new Error("No se encontró ningún carrito con ese ID");
             }
@@ -36,11 +31,7 @@ export class CartsManager {
                 throw new Error("Los productos deben ser un array");
             }else {
                 products.forEach(product => {                    
-                    if (product.productId !== undefined) {
-                        if (isNaN(product.productId)) {
-                            throw new Error("El ID de los productos deben ser números");
-                        }
-                    } else {
+                    if (product.productId == undefined) {
                         throw new Error("El ID de los productos son requeridos");
                     }
 
@@ -52,14 +43,7 @@ export class CartsManager {
                 });
             }
 
-            const carts = await this.getCarts();
-
-            let id = 1
-            if (carts.length > 0) {
-                id = carts[carts.length - 1].id + 1
-            }
-
-            const newCart = { id, products: Array.isArray(products) ? products : [] };
+            const newCart = { products: Array.isArray(products) ? products : [] };
 
             return await CartModel.create(newCart);
         } catch (error) {
@@ -67,39 +51,72 @@ export class CartsManager {
         }
     }
 
-    async addProduct(cartId, productId, quantity = 1) {
+    async addProduct(cartId, productId, quantity = 1, setQuantity = false) {
         try {
-            cartId = Number(cartId);
-            productId = Number(productId);
             quantity = Number(quantity);
-            if (isNaN(cartId) || isNaN(productId) || isNaN(quantity)){
-                throw new Error("Formatos incorrectos");
+            if (isNaN(quantity)){
+                throw new Error("La cantidad de los productos debe ser un número");
             }
 
-            const carts = await this.getCarts();
-          
-            const productAdded = { productId: productId, quantity };
+            const cart = await CartModel.findById(cartId).lean();
 
-            const cartIndex = carts.findIndex(cart => cart.id === cartId);
+            if (cart) {
+                let product = cart.products.find(p => p.product == productId);
 
-            let productExiste = false
-            if(cartIndex !== -1){
-                if (carts[cartIndex].products.length !== 0) {
-                    productExiste = carts[cartIndex].products.findIndex(p => p.productId === productId)     
-
-                    if (productExiste !== -1) {
-                        return await CartModel.updateOne({id: cartId, "productos.productoId": productId}, {$inc: {"productos.$.quantity": quantity}}).lean();
+                if (product) {
+                    if (setQuantity) {
+                        return await CartModel.updateOne({_id: cartId, "products.product": productId}, {$set: {"products.$.quantity": quantity}}).lean();
                     }
-                    else {
-                        return await CartModel.updateOne({id: cartId}, {$push: {products: productAdded}}).lean();
-                    }   
+                    return await CartModel.updateOne({_id: cartId, "products.product": productId}, {$inc: {"products.$.quantity": quantity}}).lean();
                 } else {
-                    return await CartModel.updateOne({id: cartId}, {$push: {products: productAdded}}).lean();
-                    }   
+                    return await CartModel.updateOne({_id: cartId}, {$push: {products: {product: productId, quantity}}}).lean();
+                }
 
             } else {
                 throw new Error("No se encontró ningún carrito con ese ID");
             }
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    async deleteProduct(cartId, productId) {
+        try {
+            
+            return await CartModel.updateOne({_id: cartId}, {$pull: {products: {product: productId}}}).lean();
+            
+        } catch (error) {
+            throw new Error(error.message);
+        }      
+    }
+
+    async deleteAllProducts(cartId) {
+        try {
+            return await CartModel.updateOne({_id: cartId}, {products: []}).lean();
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    async updateCart(cartId, products) {
+        try {
+            if(!Array.isArray(products)){
+                throw new Error("Los productos deben ser un array");
+            }else {
+                products.forEach(product => {                    
+                    if (product.product == undefined) {
+                        throw new Error("El ID de los productos son requeridos");
+                    }
+
+                    if (product.quantity) {                        
+                        if (isNaN(product.quantity)) {
+                            throw new Error("La cantidad de los productos deben ser números");
+                        }
+                    }
+                });
+            }
+
+            return await CartModel.updateOne({_id: cartId}, {products}).lean();
         } catch (error) {
             throw new Error(error.message);
         }

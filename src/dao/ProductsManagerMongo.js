@@ -2,9 +2,31 @@ import {ProductsModel} from './models/products.modelo.js';
 
 export class ProductsManager {
     
-    async getProducts() {
+    async getProducts(limit = 5, page = 1, sort, query) {
         try{
-            return await ProductsModel.find().lean();
+            if (!limit || limit < 1, !page || page < 1) {
+                throw new Error("Limit y Page deben ser números mayores a 0");
+            }
+
+            let {
+                status = "error",
+                docs: products,
+                totalPages,
+                prevPage, nextPage,
+                hasPrevPage, hasNextPage
+            } = await ProductsModel.paginate({query}, {limit, page, sort, lean:true});
+
+            status = "success";
+            return {
+                status,
+                totalPages,
+                prevPage,
+                nextPage,
+                hasPrevPage,
+                hasNextPage,
+                products
+            }
+
         } catch (error) {
             throw new Error(error.message);
         }
@@ -12,12 +34,7 @@ export class ProductsManager {
 
     async getProductById(id) {
         try {
-            id = Number(id);
-            if (isNaN(id)) {
-                throw new Error("El ID del producto debe ser un número");
-            }
-
-            let product = await ProductsModel.findOne({id}).lean();
+            let product = await ProductsModel.findById(id).lean();
 
             if (product) {
             return product;
@@ -41,12 +58,6 @@ export class ProductsManager {
                 throw new Error("Ya existe un producto con ese código");
             }
 
-            let id = 1
-            if (products.length > 0) {
-                id = products[products.length - 1].id + 1
-                product.id = id
-            }
-
             return await ProductsModel.create(product);
         } catch (error) {
             throw new Error(error.message);
@@ -55,10 +66,6 @@ export class ProductsManager {
 
     async updateProduct(id, modificacion = {}) {
         try {
-            id = Number(id);
-            if (isNaN(id)) {
-                throw new Error("El ID del producto debe ser un número");
-            }
 
             let propiedadesValidasProduct = ["title", "description", "price", "thumbnail", "stock", "code", "status"]
 
@@ -84,7 +91,7 @@ export class ProductsManager {
                 throw new Error("Este producto no existe")
             }
 
-            return await ProductsModel.updateOne({id:id}, modificacion);
+            return await ProductsModel.findByIdAndUpdate(id, modificacion);
         } catch (error) {
             throw new Error(error.message);
         }        
@@ -92,12 +99,8 @@ export class ProductsManager {
 
     async deleteProduct(id) {
         try {
-            id = Number(id);
-            if (isNaN(id)) {
-                throw new Error("El ID del producto debe ser un número");
-            }
 
-            return await ProductsModel.deleteOne({id:id});
+            return await ProductsModel.findByIdAndDelete(id);
         } catch (error) {
             throw new Error(error.message);
         }

@@ -5,18 +5,16 @@ const productosManager = new ProductsManager();
 
 router.get("/", async(req, res) => {
     try {
-        let products = await productosManager.getProducts()
+        
+        let {limit, page, sort, query } = req.query
 
-        let {limit} = req.query
-
-        if (limit && limit > 0) {
-            products = products.slice(0, limit)            
-        }
-
-        res.status(200).json(products)
+        let response = await productosManager.getProducts(limit, page, sort, query)
+        
+        res.status(200).json(response)
         
     } catch (error) {
         res.status(500).send(error.message);
+        console.log(error.message);
     }
 })
 
