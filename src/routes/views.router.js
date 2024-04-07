@@ -5,6 +5,10 @@ router.get("/", async (req, res) => {
     res.render("home");
 });
 
+router.get("/products", async (req, res) => {
+    res.render("products");
+});
+
 router.get("/realTimeProducts", async (req, res) => {  
     res.render("realTimeProducts");
 });

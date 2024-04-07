@@ -7,7 +7,8 @@ import { router as cartsRouter } from './routes/carts.router.js';
 import { router as viewsRouter } from './routes/views.router.js';
 import handlebars from 'express-handlebars';
 import {Server} from 'socket.io';
-import { MessagesManager } from './dao/MessagesManagerMongo.js';
+import { MessagesManager } from './dao/mongo/MessagesManagerMongo.js';
+import session from 'express-session';
 let messagesManager = new MessagesManager();
 
 const port = 8080
@@ -21,6 +22,13 @@ app.set("views", path.join(__dirname, "views"))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(session(
+    {
+        secret: "backend53110",
+        resave: true,
+        saveUninitialized: true
+    }
+))
 
 app.use(express.static(path.join(__dirname,'/public')));
 

@@ -1,4 +1,4 @@
-import {ProductsModel} from './models/products.modelo.js';
+import {ProductsModel} from '../models/products.modelo.js';
 
 export class ProductsManager {
     

@@ -1,4 +1,4 @@
-import {CartModel} from './models/cart.modelo.js';
+import {CartModel} from '../models/cart.modelo.js';
 
 export class CartsManager {
 
