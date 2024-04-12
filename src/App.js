@@ -4,6 +4,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { router as productsRouter } from './routes/products.router.js';
 import { router as cartsRouter } from './routes/carts.router.js';
+import { router as sessionsRouter } from './routes/sessions.router.js';
 import { router as viewsRouter } from './routes/views.router.js';
 import handlebars from 'express-handlebars';
 import {Server} from 'socket.io';
@@ -32,6 +33,7 @@ app.use(session(
 
 app.use(express.static(path.join(__dirname,'/public')));
 
+app.use("/api/sessions", sessionsRouter)
 app.use("/api/products", (req, res, next)=>{
     req.io=io
     next()
