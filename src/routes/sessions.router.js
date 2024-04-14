@@ -1,66 +1,31 @@
 import { Router } from 'express';
-import { UsuariosManagerMongo } from '../dao/mongo/UsuariosManagerMONGO.js';
-import { creaHash } from '../utils.js';
+import { UsuariosManagerMongo } from '../dao/mongo/UsuariosManagerMongo.js';
+import { creaHash, validaPassword } from '../utils.js';
+import passport from 'passport';
 export const router=Router()
 
 let usuariosManager=new UsuariosManagerMongo()
 
-router.post('/registro',async(req,res)=>{
+router.get('/errorRegistro', (req, res) => {
+    return res.redirect('/registro?error=Error en el proceso de registro')
+})
 
-    let {first_name, last_name, email, age, password} =req.body
-    if(!first_name|| !last_name || !email || !age || !password){
-        // res.setHeader('Content-Type','application/json');
-        // return res.status(400).json({error:`Faltan datos`})
-        return res.redirect("/registro?error=Faltan datos")
-    }
+// 3) Implemento la estrategia correspondiente
+router.post('/registro', passport.authenticate('registro', {failureRedirect:'/api/sessions/errorRegistro'}), (req,res)=>{
 
-    let existe=await usuariosManager.getBy({email})
-    if(existe){
-        // res.setHeader('Content-Type','application/json');
-        // return res.status(400).json({error:`Ya existen usuarios con email ${email}`})
-        return res.redirect(`/registro?error=Ya existen usuarios con email ${email}`)
-
-    }
-
-    let rol = "usuario"
-
-    // validaciones extra...
-    password=creaHash(password)
-
-    try {
-        await usuariosManager.create({rol, first_name, last_name, email, age, password})
-
-        // res.setHeader('Content-Type','application/json');
-        // return res.status(200).json({payload:"Registro exitoso", nuevoUsuario});
-        return res.redirect(`/registro?mensaje=Registro exitoso para ${last_name}`)
-
-    } catch (error) {
-        return res.redirect(`/registro?error=Error 500 - error inesperado`)
-        
-    }
-
+    // passport, si se ejecuta correctamente deja un req.user
+    return res.redirect(`/registro?mensaje=Registro exitoso para ${req.user.last_name}`)
 
 })
 
-router.post('/login',async(req,res)=>{
+router.get('/errorLogin', (req, res) => {
+    return res.status(400).json({error:'Error en el proceso de login'})
+})
 
-    let {email, password} =req.body
-    if(!email || !password){
-        res.setHeader('Content-Type','application/json');
-        return res.status(400).json({error:`Faltan datos`})
-    }
+// 3) Implemento la estrategia correspondiente
+router.post('/login', passport.authenticate('login', {failureRedirect:'/api/sessions/errorLogin'}), (req,res)=>{
 
-    let usuario=await usuariosManager.getBy({email})
-    if(!usuario){
-        res.setHeader('Content-Type','application/json');
-        return res.status(401).json({error:`Credenciales incorrectas`})
-    }
-
-    if(usuario.password!==creaHash(password)){
-        res.setHeader('Content-Type','application/json');
-        return res.status(401).json({error:`Credenciales incorrectas`})
-    }
-
+    let usuario = req.user
     usuario={...usuario}
     delete usuario.password
     req.session.usuario=usuario // en un punto de mi proyecto
@@ -71,6 +36,25 @@ router.post('/login',async(req,res)=>{
     })
 })
 
+router.get('/github', passport.authenticate('github', {}), (req,res)=>{});
+
+// 3) Implemento la estrategia correspondiente
+router.get('/callbackGithub', passport.authenticate('github', {failureRedirect:'/api/sessions/errorGithub'}), (req,res)=>{
+    console.log('hola')
+    req.session.usuario = req.user
+    res.setHeader('Content-Type','application/json')
+    res.status(200).json({
+        payload:"Login correcto", usuario:req.user
+    })
+})
+
+router.get('/errorGithub', (req, res) => {
+    res.setHeader('Content-Type','application/json')
+    res.status(500).json({
+        error:'Error inesperado en el servidor - Intente mas tarde',
+        detalle: 'fallo al autenticar con GitHub'
+    })
+})
 
 router.get('/logout',(req,res)=>{
 

@@ -27,17 +27,17 @@ router.get('/registro',(req,res)=>{
 
     let {error, mensaje} = req.query
 
-    res.status(200).render('registro', {error, mensaje})
+    res.status(200).render('registro', {error, mensaje, login:req.session.usuario})
 })
 
 router.get('/login', checklogin, (req,res)=>{
 
-    res.status(200).render('login')
+    res.status(200).render('login', {login:req.session.usuario})
 })
 
 router.get('/perfil', auth, (req,res)=>{
 
     let usuario=req.session.usuario
 
-    res.status(200).render('perfil', {usuario})
+    res.status(200).render('perfil', {usuario, login:req.session.usuario})
 })

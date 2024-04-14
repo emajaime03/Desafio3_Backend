@@ -10,6 +10,10 @@ import handlebars from 'express-handlebars';
 import {Server} from 'socket.io';
 import { MessagesManager } from './dao/mongo/MessagesManagerMongo.js';
 import session from 'express-session';
+import { inicializarPassport } from './config/passport.config.js';
+import passport from 'passport';
+import MongoStore from "connect-mongo"
+import { title } from 'process';
 let messagesManager = new MessagesManager();
 
 const port = 8080
@@ -23,13 +27,19 @@ app.set("views", path.join(__dirname, "views"))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
 app.use(session(
     {
         secret: "backend53110",
-        resave: true,
-        saveUninitialized: true
+        resave: true, saveUninitialized: true,
+        store: MongoStore.create({mongoUrl: 'mongodb+srv://ejaime03:backend53110@cluster0.x84rmxw.mongodb.net/?retryWrites=true&w=majority&dbName=ecommerce', ttl:60})       
     }
 ))
+
+// 2) inicializo passport y sus configuraciones en app.js
+inicializarPassport()
+app.use(passport.initialize())
+app.use(passport.session()) // solo si estamos usando sesiones
 
 app.use(express.static(path.join(__dirname,'/public')));
 
