@@ -1,10 +1,6 @@
 import { Router } from 'express';
-import { UsuariosManagerMongo } from '../dao/mongo/UsuariosManagerMongo.js';
-import { creaHash, validaPassword } from '../utils.js';
 import passport from 'passport';
 export const router=Router()
-
-let usuariosManager=new UsuariosManagerMongo()
 
 router.get('/errorRegistro', (req, res) => {
     return res.redirect('/registro?error=Error en el proceso de registro')

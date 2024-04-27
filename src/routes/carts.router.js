@@ -8,6 +8,7 @@ const productsManager = new ProductsManager();
 
 router.get("/:cid", async (req, res) => {
     try {
+
         const products = await cartManager.getCartProductsById(req.params.cid)
 
         res.send(products);

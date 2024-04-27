@@ -1,10 +1,12 @@
 import passport from "passport";
 import local from "passport-local";
 import { UsuariosManagerMongo } from "../dao/mongo/UsuariosManagerMongo.js";
+import { CartsManager } from "../dao/mongo/CartsManagerMongo.js";
 import { creaHash, validaPassword } from "../utils.js";
 import github from "passport-github2";
 
 const usuariosManager = new UsuariosManagerMongo();
+const cartsManager = new CartsManager();
 
 // 1) Definir la funcion de configuracion
 export const inicializarPassport = () => {
@@ -33,7 +35,9 @@ export const inicializarPassport = () => {
                     // validaciones extra...
                     password = creaHash(password)
 
-                    let nuevoUsuario = await usuariosManager.create({ rol, first_name, last_name, age, email:username, password })
+                    let userCart = await cartsManager.createCart()
+
+                    let nuevoUsuario = await usuariosManager.create({ rol, first_name, last_name, age, email:username, password, cart: userCart._id})
 
                     return done(null, nuevoUsuario)
                 }
@@ -87,8 +91,9 @@ export const inicializarPassport = () => {
                     }
                     let usuario=await usuariosManager.getBy({email})
                     if(!usuario){
+                        let userCart = await cartsManager.createCart()
                         usuario=await usuariosManager.create({
-                            nombre, email, 
+                            nombre, email, rol:'usuario', cart:userCart._id,
                             profileGithub: profile
                         })
                     }

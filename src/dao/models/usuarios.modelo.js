@@ -1,20 +1,26 @@
 import mongoose from 'mongoose'
+const { Schema, ObjectId } = mongoose;
 
-export const usuariosModelo = mongoose.model(
-    'usuarios', 
-    new mongoose.Schema(
-        {
-            rol: String,
-            nombre: String,
-            apellido: String,
-            email: {
-                type: String, unique: true
-            },
-            age: Number,
-            password: String
+const usuariosColl = "usuarios"
+const usuariosSchema = new Schema(
+    {
+        rol: String,
+        nombre: String,
+        apellido: String,
+        age: Number,
+        email: {
+            type: String, unique: true
         },
-        {
-            timestamps: true, strict:false
-        }
-    )
+        password: String,
+        cart: {
+            type: ObjectId,
+            required: true,
+            ref: "carts"
+        },
+    },
+    {
+        timestamps: true, strict: false
+    }
 )
+
+export const usuariosModelo = mongoose.model(usuariosColl, usuariosSchema);

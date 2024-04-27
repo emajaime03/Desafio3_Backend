@@ -10,9 +10,11 @@
         <li>
             <a href="/realTimeProducts">Real time products</a>
         </li>
-        <li>
-            <a href="/carts/660c533d21c0fc92939380aa">My cart</a>
-        </li>
+        {{#if login}}
+            <li>
+                <a href="/carts">My cart</a>
+            </li>
+        {{/if}}
         <li>
             <a href="/chat">Chat</a>
         </li>

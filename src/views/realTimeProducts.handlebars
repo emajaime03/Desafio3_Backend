@@ -4,9 +4,9 @@
     
 </div>
 
-<hr>
-<section class="links">
-    <a href="/">Home</a>
-</section>
+{{>menu}}
+<script>
+    const cartId = "{{cartId}}";
+</script>
 <script src="socket.io/socket.io.js"></script>
 <script src="js/realTimeProducts.js"></script>

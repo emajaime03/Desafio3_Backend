@@ -1,13 +1,11 @@
-<h2>Cart {{cartId}}:</h2>
+<h2>{{name}}'s Cart:</h2>
 <hr>
 <ul id="productList" class="list-container carts-list-container">
     
 </ul>
 
 <hr>
-<section class="links">
-    <a href="/">Home</a>
-</section>
+{{>menu}}
 <script>
     const cartId = "{{cartId}}";
 </script>

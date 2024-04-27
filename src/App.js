@@ -13,7 +13,6 @@ import session from 'express-session';
 import { inicializarPassport } from './config/passport.config.js';
 import passport from 'passport';
 import MongoStore from "connect-mongo"
-import { title } from 'process';
 let messagesManager = new MessagesManager();
 
 const port = 8080

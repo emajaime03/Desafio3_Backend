@@ -8,7 +8,7 @@ document.getElementById('productList').addEventListener('click', (event) => {
         const btnAgregar = event.target;
         const textoOriginal = btnAgregar.textContent;
         const productId = btnAgregar.getAttribute('data-id');
-        const url = 'http://localhost:8080/api/carts/660c533d21c0fc92939380aa/product/' + productId;
+        const url = `http://localhost:8080/api/carts/${cartId}/product/` + productId;
         fetch(url, {
             method: 'POST'
         })

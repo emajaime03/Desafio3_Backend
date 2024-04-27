@@ -4,23 +4,41 @@ import { checklogin } from '../middlewares/checklogin.js';
 export const router = Router()
 
 router.get("/", async (req, res) => {
-    res.render("home");
+    res.render("home", {login:req.session.usuario});
 });
 
 router.get("/products", async (req, res) => {
-    res.render("products");
+    
+    let usuario = req.session.usuario
+
+    if (usuario) {
+        res.render("products", {cartId: usuario.cart, login:usuario});
+    }
+    else{
+        res.render("products", {cartId: null, login:usuario});
+    }
 });
 
 router.get("/realTimeProducts", async (req, res) => {  
-    res.render("realTimeProducts");
+    let usuario = req.session.usuario
+
+    if (usuario) {
+        res.render("realTimeProducts", {cartId: usuario.cart, login:usuario});
+    }
+    else{
+        res.render("realTimeProducts", {cartId: null, login:usuario});
+    }
 });
 
-router.get("/carts/:cid", async (req, res) => {  
-    res.render("carts", {cartId: req.params.cid});
+router.get("/carts", auth, async (req, res) => {  
+
+    let usuario = req.session.usuario
+
+    res.render("carts", {cartId: usuario.cart, name: usuario.last_name, login:usuario});
 });
 
 router.get('/chat', async (req,res)=>{
-    res.status(200).render('chat')
+    res.status(200).render('chat', {login:req.session.usuario})
 })
 
 router.get('/registro',(req,res)=>{
@@ -39,5 +57,5 @@ router.get('/perfil', auth, (req,res)=>{
 
     let usuario=req.session.usuario
 
-    res.status(200).render('perfil', {usuario, login:req.session.usuario})
+    res.status(200).render('perfil', {usuario, login:usuario})
 })
