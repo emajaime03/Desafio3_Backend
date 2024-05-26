@@ -33,31 +33,29 @@ document.getElementById('listContainer').addEventListener('click', (event) => {
     }
 });
 
-socket.on('addProduct', (data) => {
-    try {
-        if (data) {
-            refrescarProductos();
-        } else {
-            throw new Error('No se pudo agregar el producto');
-        }
-    } catch (error) {
-        console.error(error);
-    }
-});
+// socket.on('addProduct', (data) => {
+//     try {
+//         if (data) {
+//             refrescarProductos();
+//         } else {
+//             throw new Error('No se pudo agregar el producto');
+//         }
+//     } catch (error) {
+//         console.error(error);
+//     }
+// });
+// socket.on('deleteProduct', (data) => {
+//     try {
+//         if (data) {
+//             refrescarProductos();
+//         } else {
+//             throw new Error('No se pudo eliminar el producto');
+//         }
+//     } catch (error) {
+//         console.error(error);
+//     }
+// });
 
-socket.on('deleteProduct', (data) => {
-    try {
-        if (data) {
-            refrescarProductos();
-        } else {
-            throw new Error('No se pudo eliminar el producto');
-        }
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-//Funciones internas
 function refrescarProductos() {
 
     fetch(urlProducts + '?limit=99999')

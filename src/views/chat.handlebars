@@ -1,7 +1,7 @@
 <h2>Chat</h2>
 <hr>
+<label>Usuario: <strong>{{login.email}}</strong></label>
 <section class="inputs-container">
-    <input type="text" id="user" placeholder="Ingrese su correo">
     <input type="text" id="mensaje" placeholder="Ingrese mensaje">
 </section>
 
@@ -9,6 +9,9 @@
 
 {{>menu}}
 
+<script>
+    const user = "{{login.email}}";
+</script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/chat.js"></script>

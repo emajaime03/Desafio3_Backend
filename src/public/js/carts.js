@@ -1,4 +1,4 @@
-const url = 'http://localhost:8080/api/carts/' + cartId;
+const url = `/api/carts/${cartId}`;
 listProducts(url);
 
 //Métodos internos
@@ -12,9 +12,9 @@ function listProducts(url){
         })
         .then(data => {
             const productList = document.getElementById('productList');
-            const array = Object.values(data);
+            const productsArray = Object.values(data.cart.products);
             
-            array.forEach(product => {
+            productsArray.forEach(product => {
                 const cantidadEliminar = document.createElement('div');
                 const listItem = document.createElement('li');
                 const title = document.createElement('h3');

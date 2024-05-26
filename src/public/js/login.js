@@ -23,6 +23,9 @@ btnSubmit.addEventListener("click", async(e)=>{
     if(status==200){
         divMensaje.style.color="green"
         divMensaje.innerHTML=datos.message
+        if (datos.user) {
+            window.location.href = '/profile';
+        }
     }else{
         divMensaje.style.color="red"
         divMensaje.innerHTML=datos.error

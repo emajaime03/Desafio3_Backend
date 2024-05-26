@@ -1,33 +1,48 @@
-let inputUser=document.getElementById("user")
-let inputMensaje=document.getElementById("mensaje")
+let inputMessage=document.getElementById("mensaje")
 let btnObtenerHistorial = document.getElementById("btnObtenerHistorial")
 let divMensajes=document.getElementById("mensajes")
-inputUser.focus()
+inputMessage.focus()
 
 const socket=io()
 
-socket.on("historial", userMessages=>{
-    divMensajes.innerHTML = "";
-    userMessages.forEach(mensaje=>{
-        divMensajes.innerHTML+=`<div class="mensaje"><strong>${mensaje.user}</strong> dice: <i>${mensaje.message}</i></div><br>`
-    })
-})
-
-socket.on("mensaje", (nombre, mensaje)=>{
-    divMensajes.innerHTML+=`<div class="mensaje"><strong>${nombre}</strong> dice: <i>${mensaje}</i></div><br>`
-})
-
-inputMensaje.addEventListener("keyup", e=>{
+inputMessage.addEventListener("keyup", e=>{
     e.preventDefault()
-    if(e.code==="Enter" && e.target.value.trim().length>0){        
-        socket.emit("mensaje", inputUser.value, e.target.value.trim())
-        e.target.value=""
-        inputUser.value=""
-        inputUser.focus()
+    if(e.code==="Enter" && e.target.value.trim().length>0){
+        fetch("/api/messages", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                user: user,
+                message: e.target.value.trim()
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data if needed
+                e.target.value=""
+                inputMessage.focus()
+            })
+            .catch(error => {
+                // Handle any errors that occurred during the fetch request
+                console.error('Error:', error);
+            });
+
+        socket.emit("reload")        
     }
-})   
-
-btnObtenerHistorial.addEventListener("click", e=>{
-    e.preventDefault()
-    socket.emit("obtenerHistorial")
 })
+
+async function reload(){
+    let response = await fetch("/api/messages")
+    let userMessages = await response.json()
+    console.log(userMessages)
+    divMensajes.innerHTML = "";
+    userMessages.forEach(message=>{
+        divMensajes.innerHTML+=`<div class="mensaje"><strong>${message.user}</strong> dice: <i>${message.message}</i></div><br>`
+    })
+}
+
+socket.on("reload", () => {
+    reload();
+});

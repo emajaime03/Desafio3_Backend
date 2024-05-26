@@ -1,5 +1,5 @@
 const paginationContainer = document.getElementById('pagination');
-const urlProducts = 'http://localhost:8080/api/products' + window.location.search;
+const urlProducts = '/api/products' + window.location.search;
 
 listProducts(urlProducts);
 
@@ -8,26 +8,32 @@ document.getElementById('productList').addEventListener('click', (event) => {
         const btnAgregar = event.target;
         const textoOriginal = btnAgregar.textContent;
         const productId = btnAgregar.getAttribute('data-id');
-        const url = `http://localhost:8080/api/carts/${cartId}/product/` + productId;
-        fetch(url, {
-            method: 'POST'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Ocurrió un error al agregar el producto al carrito');
-                }
-                return response.json();
+        if (!cartId) {
+            window.location.href = '/login';
+        } else {
+            
+            const url = `/api/carts/${cartId}/product/${productId}`;
+            console.log(url)
+            fetch(url, {
+                method: 'POST'
             })
-            .then(data => {
-                btnAgregar.textContent = 'Agregado!';
-
-                setTimeout(function() {
-                    btnAgregar.textContent = textoOriginal;
-                }, 700);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ocurrió un error al agregar el producto al carrito');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    btnAgregar.textContent = 'Agregado!';
+    
+                    setTimeout(function() {
+                        btnAgregar.textContent = textoOriginal;
+                    }, 700);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
     }
 });
 
@@ -42,8 +48,9 @@ function listProducts(url){
         })
         .then(data => {
             const productList = document.getElementById('productList');
-    
-            data.products.forEach(product => {
+            const products = Object.values(data.products);
+            
+            products.forEach(product => {
                 const listItem = document.createElement('li');
                 const title = document.createElement('h3');
                 const price = document.createElement('p');
@@ -74,36 +81,39 @@ function listProducts(url){
                 productList.appendChild(listItem);
             });
             
-            const btnFirst = document.createElement('button');
-            btnFirst.textContent = '1';
-            btnFirst.addEventListener('click', () => {
-                window.location.href = '/products?page=1'
-            });
-            paginationContainer.appendChild(btnFirst);
-            
-            if (data.hasPrevPage) {
-                const btnPrev = document.createElement('button');
-                btnPrev.textContent = '<';
-                btnPrev.addEventListener('click', () => {
-                    window.location.href = '/products?page=' + data.prevPage
+            if (data.totalPages > 1) {
+                const btnFirst = document.createElement('button');
+                btnFirst.textContent = '1';
+                btnFirst.addEventListener('click', () => {
+                    window.location.href = '/products?page=1'
                 });
-                paginationContainer.appendChild(btnPrev);
-            }
-            if (data.hasNextPage) {
-                const btnNext = document.createElement('button');
-                btnNext.textContent = '>';
-                btnNext.addEventListener('click', () => {
-                    window.location.href = '/products?page=' + data.nextPage
+                paginationContainer.appendChild(btnFirst);
+                
+                if (data.hasPrevPage) {
+                    const btnPrev = document.createElement('button');
+                    btnPrev.textContent = '<';
+                    btnPrev.addEventListener('click', () => {
+                        window.location.href = '/products?page=' + data.prevPage
+                    });
+                    paginationContainer.appendChild(btnPrev);
+                }
+                if (data.hasNextPage) {
+                    const btnNext = document.createElement('button');
+                    btnNext.textContent = '>';
+                    btnNext.addEventListener('click', () => {
+                        window.location.href = '/products?page=' + data.nextPage
+                    });
+                    paginationContainer.appendChild(btnNext);
+                }
+                
+                
+                const btnLast = document.createElement('button');
+                btnLast.textContent = data.totalPages;
+                btnLast.addEventListener('click', () => {
+                    window.location.href = '/products?page=' + data.totalPages
                 });
-                paginationContainer.appendChild(btnNext);
-            }
-
-            const btnLast = document.createElement('button');
-            btnLast.textContent = data.totalPages;
-            btnLast.addEventListener('click', () => {
-                window.location.href = '/products?page=' + data.totalPages
-            });
-            paginationContainer.appendChild(btnLast);
+                paginationContainer.appendChild(btnLast);
+            } 
 
         })
         .catch(error => {

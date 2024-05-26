@@ -1,13 +1,13 @@
 import mongoose from 'mongoose'
 const { Schema, ObjectId } = mongoose;
 
-const usuariosColl = "usuarios"
-const usuariosSchema = new Schema(
+const usersColl = "users"
+const usersSchema = new Schema(
     {
         rol: String,
-        nombre: String,
-        apellido: String,
         age: Number,
+        first_name: String,
+        last_name: String,
         email: {
             type: String, unique: true
         },
@@ -23,4 +23,4 @@ const usuariosSchema = new Schema(
     }
 )
 
-export const usuariosModelo = mongoose.model(usuariosColl, usuariosSchema);
+export const UsersModel = mongoose.model(usersColl, usersSchema);
