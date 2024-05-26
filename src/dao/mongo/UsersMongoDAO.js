@@ -1,6 +1,8 @@
 import { UsersModel } from "../models/users.model.js";
 
 export class UsersMongoDAO{
+
+    constructor(){}
     
     async getAll(){
         return await UsersModel.find().lean()

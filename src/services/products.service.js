@@ -1,8 +1,8 @@
-import { ProductsMongoDAO as ProductsDAO } from "../dao/mongo/ProductsMongoDAO.js"
+import {ProductsDAO} from "../dao/factory.js"
 
 class ProductsService {
     constructor(dao) {
-        this.ProductsDAO = dao
+        this.ProductsDAO = new dao()
     }
 
     async getAllProductsPaginate(limit = 5, page = 1, sort = 'desc', status = 'true', category) {
@@ -38,4 +38,4 @@ class ProductsService {
     }
 }
 
-export const productsService = new ProductsService(new ProductsDAO())
+export const productsService = new ProductsService(ProductsDAO)

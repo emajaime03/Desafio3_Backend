@@ -1,8 +1,8 @@
-import { MessagesMongoDAO as MessagesDAO } from "../dao/mongo/MessagesMongoDAO.js"
+import {MessagesDAO} from "../dao/factory.js"
 
 class MessagesService {
     constructor(dao) {
-        this.MessagesDAO = dao
+        this.MessagesDAO = new dao()
     }
 
     async getAllMessages() {
@@ -14,4 +14,4 @@ class MessagesService {
     }
 }
 
-export const messagesService = new MessagesService(new MessagesDAO())
+export const messagesService = new MessagesService(MessagesDAO)

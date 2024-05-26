@@ -34,16 +34,6 @@ io.on("connection", async socket=>{
     })
 })
 
-const connectDB = async () => {
-    try {        
-        await mongoose.connect(`${config.db.MONGO_URL}&dbname=${config.db.DB_NAME}`);
-        console.log('Base de datos conectada');
-    } catch (error) {
-        console.error('Error al conectar a la base de datos', error);
-    }
-}
-connectDB();
-
 app.engine("handlebars", handlebars.engine())
 app.set("view engine", "handlebars")
 app.set("views", path.join(__dirname, "views"))

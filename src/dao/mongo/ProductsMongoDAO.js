@@ -1,6 +1,8 @@
 import {ProductsModel} from '../models/products.model.js';
 
 export class ProductsMongoDAO {
+
+    constructor(){}
     
     async getAllPaginate(query, options) {
         let {

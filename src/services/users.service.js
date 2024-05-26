@@ -1,8 +1,8 @@
-import { UsersMongoDAO as UsersDAO } from "../dao/mongo/UsersMongoDAO.js"
+import {UsersDAO} from "../dao/factory.js"
 
 class UsersService{
     constructor(dao){
-        this.UsersDAO=dao
+        this.UsersDAO= new dao()
     }
 
     async getAllUsers(){
@@ -30,4 +30,4 @@ class UsersService{
     }
 }
 
-export const usersService=new UsersService(new UsersDAO())
+export const usersService=new UsersService(UsersDAO)

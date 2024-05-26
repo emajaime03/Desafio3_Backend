@@ -2,6 +2,8 @@ import { CartsModel } from '../models/carts.model.js';
 
 export class CartsMongoDAO {
 
+    constructor(){}
+
     async getAll() {
         return await CartsModel.find().lean();
     }

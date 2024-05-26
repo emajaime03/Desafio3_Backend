@@ -10,6 +10,7 @@ export const config={
         SECRET: process.env.SECRET
     },
     db:{
+        PERSISTANCE: process.env.PERSISTANCE,
         MONGO_URL: process.env.MONGO_URL, 
         DB_NAME: process.env.DB_NAME
     }
