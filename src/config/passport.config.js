@@ -1,9 +1,11 @@
 import passport from "passport";
 import local from "passport-local";
-import { usersService } from "../services/users.service.js";
-import { cartsService } from "../services/carts.service.js";
+import { UsersDAO, CartsDAO } from "../dao/factory.js";
 import { creaHash, validaPassword as isValidPassword } from "../utils.js";
 import github from "passport-github2";
+
+let usersDAO = new UsersDAO()
+let cartsDAO = new CartsDAO()
 
 // 1) Definir la funcion de configuracion
 export const inicializarPassport = () => {
@@ -22,7 +24,7 @@ export const inicializarPassport = () => {
                         return done(null, false, { message: 'Datos incompletos' })
                     }
 
-                    let existe = await usersService.getUserByEmail(username)
+                    let existe = await usersDAO.getOneBy({ email: username })
                     if (existe) {
                         return done(null, false, { message: 'Usuario ya registrado' })
                     }
@@ -31,15 +33,15 @@ export const inicializarPassport = () => {
                     if (username === 'adminCoder@coder.com') {
                         rol = 'admin'
                     } else {
-                        rol = 'user'                        
+                        rol = 'user'
                     }
 
                     // validaciones extra...
                     password = creaHash(password)
 
-                    let userCart = await cartsService.createCart()
+                    let userCart = await cartsDAO.create()
 
-                    let newUser = await usersService.createUser({ rol, first_name, last_name, age, email:username, password, cart: userCart._id})
+                    let newUser = await usersDAO.create({ rol, first_name, last_name, age, email: username, password, cart: userCart._id })
 
                     return done(null, newUser)
                 }
@@ -59,7 +61,7 @@ export const inicializarPassport = () => {
             async function (username, password, done) {
                 try {
 
-                    let usuario = await usersService.getUserByEmail(username)
+                    let usuario = await usersDAO.getOneBy({ email: username })
                     if (!usuario) {
                         return done(null, false, { message: 'Usuario no registrado' })
                     }
@@ -68,7 +70,7 @@ export const inicializarPassport = () => {
                         return done(null, false, { message: 'Contraseña incorrecta' })
                     }
 
-                    return done(null,usuario)
+                    return done(null, usuario)
                 } catch (error) {
                     return done(error)
                 }
@@ -84,18 +86,24 @@ export const inicializarPassport = () => {
                 clientSecret: 'completar',
                 callbackURL: 'completar'
             },
-            async function(access_token, refreshToken, profile, done){
+            async function (access_token, refreshToken, profile, done) {
                 try {
-                    let nombre=profile._json.name
-                    let email=profile._json.email
-                    if(!email){
+                    let name = profile._json.name
+                    let email = profile._json.email
+                    if (!email) {
                         return done(null, false)
                     }
-                    let usuario=await usersService.getUserByEmail(email)
-                    if(!usuario){
-                        let userCart = await cartsService.createCart()
-                        usuario=await usersService.createUser({
-                            nombre, email, rol:'usuario', cart:userCart._id,
+                    let usuario = await usersDAO.getOneBy(email)
+                    if (!usuario) {
+                        let userCart = await cartsDAO.create()
+                        let rol
+                        if (email === 'adminCoder@coder.com') {
+                            rol = 'admin'
+                        } else {
+                            rol = 'user'
+                        }
+                        usuario = await usersDAO.createUser({
+                            name, email, rol, cart: userCart._id,
                             profileGithub: profile
                         })
                     }

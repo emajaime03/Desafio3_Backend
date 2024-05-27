@@ -6,11 +6,13 @@ class ProductsService {
     }
 
     async getAllProductsPaginate(limit = 5, page = 1, sort = 'desc', status = 'true', category) {
+        let productsPaginate
         if (!category) {
-            return this.ProductsDAO.getAllPaginate({status:status}, { limit, page, sort: {price: sort}, lean: true })
+            productsPaginate = this.ProductsDAO.getAllPaginate({status:status}, { limit, page, sort: {price: sort}, lean: true })
         } else {
-            return this.ProductsDAO.getAllPaginate({ status:status, category:category }, { limit, page, sort: {price: sort}, lean: true })
+            productsPaginate = this.ProductsDAO.getAllPaginate({ status:status, category:category }, { limit, page, sort: {price: sort}, lean: true })
         }
+        return productsPaginate
     }
 
     async getAllProducts() {

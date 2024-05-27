@@ -1,4 +1,5 @@
 import passport from 'passport';
+import UserDTO from '../dao/dto/UserDTO.js';
 
 export default class SessionsController {
 
@@ -13,7 +14,7 @@ export default class SessionsController {
                     // return res.status(400).json({ error: info.message, success: false });
                     return res.redirect(`/signup?error=${info.message}`)
                 }
-                
+
                 // return res.status(200).json({ user, success: true });
                 return res.redirect(`/signup?mensaje=Registro exitoso para ${user.last_name}`)
             })(req, res);
@@ -40,7 +41,7 @@ export default class SessionsController {
                     }
                     req.session.user = user
 
-                    return res.status(200).json({ message: "Login exitoso", user, success: true});
+                    return res.status(200).json({ message: "Login exitoso", user, success: true });
                 });
             })(req, res, next);
         } catch (error) {
@@ -49,6 +50,17 @@ export default class SessionsController {
                 detalle: `${error.message}`
             });
         }
+    };
+
+    static async getCurrentSession(req, res, next) {
+        const userDTO = new UserDTO(req.user);
+
+        const session = {
+            message: "Sesión activa",
+            user: userDTO
+        };
+
+        res.status(200).json(session);
     };
 
     static async logout(req, res) {

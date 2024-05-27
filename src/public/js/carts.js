@@ -1,5 +1,29 @@
+let btnPurchase=document.getElementById("purchase")
+let divMensaje=document.getElementById("mensaje")
+
 const url = `/api/carts/${cartId}`;
 listProducts(url);
+
+btnPurchase.addEventListener('click', () => {
+    fetch(url + '/purchase', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ocurrió un error al realizar la compra');
+        }
+        return response.json();
+    })
+    .then(data => {
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error(error);
+    });
+});
 
 //Métodos internos
 function listProducts(url){

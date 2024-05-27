@@ -17,7 +17,7 @@ class CartsService{
         return await this.CartsDAO.create()
     }
 
-    async update(id, cart) {
+    async updateCart(id, cart) {
         return await this.CartsDAO.update(id, cart); 
     }
 

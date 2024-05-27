@@ -6,12 +6,12 @@ import SessionsController from '../controller/sessions.controller.js';
 
 export const router=Router()
 
-router.post('/signup', checklogin, auth(["public"]), SessionsController.signup)
-router.post('/login', checklogin, auth(["public"]), SessionsController.login)
+router.post('/signup', checklogin, auth(["public"]), SessionsController.signup);
+router.post('/login', checklogin, auth(["public"]), SessionsController.login);
+router.get('/current', checklogin, auth(["public"]), SessionsController.getCurrentSession);
 router.get('/logout', auth(["public"]), SessionsController.logout);
-router.get('/github', checklogin, auth(["public"]), passport.authenticate('github', {}), (req,res)=>{});
-router.get('/callbackGithub', checklogin, auth(["public"]), passport.authenticate('github', {failureRedirect:'/api/sessions/errorGithub'}), (req,res)=>{
-    console.log('hola')
+router.get('/github', checklogin, auth(["public"]), passport.authenticate('github', {}), async (req,res)=>{});
+router.get('/callbackGithub', checklogin, auth(["public"]), passport.authenticate('github', {failureRedirect: "/login"}), async (req,res)=>{
     req.session.usuario = req.user
     res.setHeader('Content-Type','application/json')
     res.status(200).json({
