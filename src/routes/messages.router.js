@@ -1,5 +1,5 @@
 import { Router } from "express";
-import MessagesController from "../controller/messages.controller.js";
+import MessagesController from "../controllers/messages.controller.js";
 import {auth} from '../middlewares/auth.js'
 
 export const router = Router();

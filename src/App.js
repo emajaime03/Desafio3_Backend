@@ -8,6 +8,7 @@ import { router as cartsRouter } from './routes/carts.router.js';
 import { router as sessionsRouter } from './routes/sessions.router.js';
 import { router as viewsRouter } from './routes/views.router.js';
 import { router as messagesRouter } from './routes/messages.router.js';
+import { router as mockingRouter } from './routes/mocking.router.js';
 import handlebars from 'express-handlebars';
 import {Server} from 'socket.io';
 import session from 'express-session';
@@ -62,6 +63,8 @@ app.use("/api/products", (req, res, next)=>{
     next()
 },productsRouter)
 app.use("/api/carts", cartsRouter)
+
+app.use("/", mockingRouter)
 
 app.get("*", (req, res) => {
     res.send("Error 404 - Not Found")

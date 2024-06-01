@@ -2,7 +2,7 @@ import { Router } from 'express';
 import passport from 'passport';
 import {auth} from '../middlewares/auth.js'
 import {checklogin} from '../middlewares/checklogin.js'
-import SessionsController from '../controller/sessions.controller.js';
+import SessionsController from '../controllers/sessions.controller.js';
 
 export const router=Router()
 

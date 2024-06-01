@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { auth } from '../middlewares/auth.js';
 import { checklogin } from '../middlewares/checklogin.js';
-import ViewsController from "../controller/views.controller.js";
+import ViewsController from "../controllers/views.controller.js";
 
 export const router = Router()
 
