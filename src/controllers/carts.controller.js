@@ -6,6 +6,7 @@ import { ERRORS } from "../utils/EErrors.js"
 import CustomError from "../utils/CustomError.js"
 import { invalidId } from "../utils/info.js"
 import { generateAddProductCartErrorInfo, generateOrderErrorInfo } from '../utils/info.js'
+import { logger } from "../utils/logger.js"
 
 export default class CartsController {
 
@@ -165,12 +166,13 @@ export default class CartsController {
             await cartsService.updateCart(cartId, cart)
 
             let newTicket = {
-                purchaser: req.user.username,
+                purchaser: req.session.user.email,
                 amount: productsAvailableForPurchase.reduce((acc, p) => acc + p.product.price * p.quantity, 0),
                 code: Math.floor(Math.random() * 1000000)
             }
 
             let ticket = await ticketsService.createTicket(newTicket)
+            logger.info(`Compra exitosa para ${req.user.username}`)
             res.setHeader('Content-Type', 'application/json')
             res.status(200).json({ ticket, productsUnavailableForPurchase })
 

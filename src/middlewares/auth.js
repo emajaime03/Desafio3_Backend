@@ -10,7 +10,7 @@ export const auth=(accesos=[])=>{
         }
 
         if(!req.session.user || !req.session.user.rol){
-            CustomError.createError({name:"Unauthorized", cause: "No existen usuarios autenticados", message:"No existen usuarios autenticados", code: ERRORS.AUTENTICATION})
+            CustomError.createError({name:"Unauthorized", cause: "No existen usuarios autenticados", message:"No existen usuarios autenticados", code: ERRORS.AUTENTICATION})            
         }
 
         if(!accesos.includes(req.session.user.rol.toLowerCase())){

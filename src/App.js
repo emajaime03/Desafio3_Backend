@@ -18,6 +18,7 @@ import MongoStore from "connect-mongo"
 import CustomError from './utils/CustomError.js';
 import errorHandler from './middlewares/errorHandler.js';
 import { ERRORS } from './utils/EErrors.js';
+import { logger, middLogg } from './utils/Logger.js';
 import "express-async-errors"
 
 const PORT = config.general.PORT;
@@ -25,19 +26,21 @@ const PORT = config.general.PORT;
 const app = express()
 
 const server = app.listen(PORT, () => {
-    console.log("Servidor corriendo en el puerto", PORT)
+    logger.http(`Servidor escuchando en el puerto ${PORT}`)
 })
 
 let io
 io = new Server(server)
 io.on("connection", async socket => {
-    console.log(`Se conecto un cliente con id ${socket.id}`)
+    logger.info(`Nuevo cliente conectado con id ${socket.id}`)
 
     io.emit("reload")
     socket.on("reload", () => {
         io.emit("reload")
     })
 })
+
+app.use(middLogg)
 
 app.engine("handlebars", handlebars.engine())
 app.set("view engine", "handlebars")

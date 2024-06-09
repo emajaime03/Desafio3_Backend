@@ -7,7 +7,8 @@ dotenv.config({
 export const config={
     general:{
         PORT: process.env.PORT||3000,
-        SECRET: process.env.SECRET
+        SECRET: process.env.SECRET,
+        MODE: process.env.MODE
     },
     db:{
         PERSISTANCE: process.env.PERSISTANCE,
