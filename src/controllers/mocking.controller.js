@@ -1,4 +1,6 @@
 import {fakerES_MX as faker} from '@faker-js/faker'
+import {ERRORS} from '../utils/EErrors.js'
+import CustomError from '../utils/CustomError.js'
 
 export default class MockingController {
 
@@ -22,14 +24,7 @@ export default class MockingController {
             res.setHeader('Content-Type', 'application/json')
             res.status(200).json({mockingProducts})
         } catch (error) {
-            console.log(error);
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json(
-                {
-                    error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                    detalle: `${error.message}`
-                }
-            )
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })            
         }
 
     }

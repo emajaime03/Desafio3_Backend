@@ -1,5 +1,7 @@
 import { isValidObjectId } from "mongoose"
 import { messagesService } from "../services/messages.service.js"
+import { ERRORS } from "../utils/EErrors.js"
+import CustomError from "../utils/CustomError.js"
 
 export default class MessagesController {
 
@@ -11,14 +13,7 @@ export default class MessagesController {
             res.setHeader('Content-Type', 'application/json')
             res.status(200).json(messages)
         } catch (error) {
-            console.log(error);
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json(
-                {
-                    error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                    detalle: `${error.message}`
-                }
-            )
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
 
     }
@@ -29,22 +24,14 @@ export default class MessagesController {
             let { user, message } = req.body
 
             if (!user || !message) {
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(400).json({ error: `Faltan datos` })
+                CustomError.createError({ name: 'Error', cause: 'Faltan datos', message: `Faltan datos`, code: ERRORS.BAD_REQUEST })
             }
 
             let userMessage = await messagesService.createMessage(user, message)
             res.setHeader('Content-Type', 'application/json')
             res.status(201).json(userMessage)
         } catch (error) {
-            console.log(error);
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json(
-                {
-                    error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                    detalle: `${error.message}`
-                }
-            )
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })         
         }
     }
 }

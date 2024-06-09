@@ -2,6 +2,10 @@ import { isValidObjectId } from "mongoose"
 import { cartsService } from "../services/carts.service.js"
 import { ticketsService } from "../services/tickets.service.js"
 import { productsService } from "../services/products.service.js"
+import { ERRORS } from "../utils/EErrors.js"
+import CustomError from "../utils/CustomError.js"
+import { invalidId } from "../utils/info.js"
+import { generateAddProductCartErrorInfo, generateOrderErrorInfo } from '../utils/info.js'
 
 export default class CartsController {
 
@@ -11,14 +15,7 @@ export default class CartsController {
             res.setHeader('Content-Type', 'application/json')
             res.status(200).json({ carts })
         } catch (error) {
-            console.log(error);
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json(
-                {
-                    error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                    detalle: `${error.message}`
-                }
-            )
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
     }
 
@@ -26,22 +23,14 @@ export default class CartsController {
         try {
             let cartId = req.params.cid
             if (!isValidObjectId(cartId)) {
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(400).json({ error: `Ingrese un id de MongoDB válido` })
+                CustomError.createError({ name: 'Error', cause: invalidId(cartId), message: "El id ingresado no tiene el formato correcto", code: ERRORS.BAD_REQUEST })
             }
 
             let cart = await cartsService.getCartById(cartId)
             res.setHeader('Content-Type', 'application/json')
             res.status(200).json({ cart })
         } catch (error) {
-            console.log(error);
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json(
-                {
-                    error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                    detalle: `${error.message}`
-                }
-            )
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
     }
 
@@ -51,14 +40,7 @@ export default class CartsController {
             res.setHeader('Content-Type', 'application/json');
             return res.status(200).json({ newCart });
         } catch (error) {
-            console.log(error);
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json(
-                {
-                    error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                    detalle: `${error.message}`
-                }
-            )
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
     }
 
@@ -67,16 +49,22 @@ export default class CartsController {
         let cartId = req.params.cid
         let productId = req.params.pid
         if (!isValidObjectId(cartId) || !isValidObjectId(productId)) {
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(400).json({ error: `Ingrese un id de MongoDB válido` })
+            CustomError.createError({ name: 'Error', cause: invalidId(cartId), message: "El id ingresado no tiene el formato correcto", code: ERRORS.BAD_REQUEST })
         }
+
+        let productExists = await productsService.getProductById(productId)
+
+        if (!productExists) {
+            CustomError.createError({ name: 'Error', cause: generateAddProductCartErrorInfo(), message: "El producto seleccionado no existe o no tiene stock suficiente.", code: ERRORS.BAD_REQUEST })
+        } else if (productExists.stock === 0) {
+            CustomError.createError({ name: 'Error', cause: generateAddProductCartErrorInfo(), message: "El producto seleccionado no tiene stock suficiente.", code: ERRORS.BAD_REQUEST })
+        } 
 
         try {
             let cart = await cartsService.getCartById(cartId)
 
             if (!cart) {
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(400).json({ error: `No se encontró ningún carrito con ese ID` })
+                CustomError.createError({ name: 'Error', cause: 'No se encontró ningún carrito con ese ID', message: "No se encontró ningún carrito con ese ID", code: ERRORS.BAD_REQUEST })
             }
 
             if (cart.products.find(p => p.product._id == productId)) {
@@ -95,14 +83,7 @@ export default class CartsController {
             res.setHeader('Content-Type', 'application/json')
             res.status(200).json({ newCart })
         } catch (error) {
-            console.log(error);
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json(
-                {
-                    error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                    detalle: `${error.message}`
-                }
-            )
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
     }
 
@@ -111,15 +92,13 @@ export default class CartsController {
             let cartId = req.params.cid
             let productId = req.params.pid
             if (!isValidObjectId(cartId) || !isValidObjectId(productId)) {
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(400).json({ error: `Ingrese un id de MongoDB válido` })
+                CustomError.createError({ name: 'Error', cause: invalidId(cartId), message: "El id ingresado no tiene el formato correcto", code: ERRORS.BAD_REQUEST })
             }
 
             let cart = await cartsService.getCartById(cartId)
 
             if (!cart) {
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(400).json({ error: `No se encontró ningún carrito con ese ID` })
+                CustomError.createError({ name: 'Error', cause: 'No se encontró ningún carrito con ese ID', message: "No se encontró ningún carrito con ese ID", code: ERRORS.BAD_REQUEST })
             }
             cart.products = cart.products.filter(p => p.product._id != productId)
 
@@ -127,14 +106,7 @@ export default class CartsController {
             res.setHeader('Content-Type', 'application/json')
             res.status(200).json({ newCart })
         } catch (error) {
-            console.log(error);
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json(
-                {
-                    error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                    detalle: `${error.message}`
-                }
-            )
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
     }
 
@@ -142,15 +114,13 @@ export default class CartsController {
         try {
             let cartId = req.params.cid
             if (!isValidObjectId(cartId)) {
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(400).json({ error: `Ingrese un id de MongoDB válido` })
+                CustomError.createError({ name: 'Error', cause: invalidId(cartId), message: "El id ingresado no tiene el formato correcto", code: ERRORS.BAD_REQUEST })
             }
 
             let cart = await cartsService.getCartById(cartId)
 
             if (!cart) {
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(400).json({ error: `No se encontró ningún carrito con ese ID` })
+                CustomError.createError({ name: 'Error', cause: 'No se encontró ningún carrito con ese ID', message: "No se encontró ningún carrito con ese ID", code: ERRORS.BAD_REQUEST })
             }
 
             cart.products = []
@@ -158,14 +128,7 @@ export default class CartsController {
             res.setHeader('Content-Type', 'application/json')
             res.status(200).json({ cart })
         } catch (error) {
-            console.log(error);
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json(
-                {
-                    error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                    detalle: `${error.message}`
-                }
-            )
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
     }
 
@@ -173,14 +136,12 @@ export default class CartsController {
         try {
             let cartId = req.params.cid
             if (!isValidObjectId(cartId)) {
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(400).json({ error: `Ingrese un id de MongoDB válido` })
+                CustomError.createError({ name: 'Error', cause: invalidId(cartId), message: "El id ingresado no tiene el formato correcto", code: ERRORS.BAD_REQUEST })
             }
 
             let cart = await cartsService.getCartById(cartId)
             if (!cart) {
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(400).json({ error: `No se encontró ningún carrito con ese ID` })
+                CustomError.createError({ name: 'Error', cause: 'No se encontró ningún carrito con ese ID', message: "No se encontró ningún carrito con ese ID", code: ERRORS.BAD_REQUEST })
             }
 
             let productsAvailableForPurchase = cart.products.filter(p => p.product.stock >= p.quantity)
@@ -188,8 +149,7 @@ export default class CartsController {
             let productsUnavailableForPurchase = cart.products.filter(p => p.product.stock < p.quantity)
 
             if(productsAvailableForPurchase.length === 0){
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(400).json({ error: `No hay productos disponibles para realizar la compra` })
+                CustomError.createError({ name: 'Error', cause: generateOrderErrorInfo(), message: "No se pudo completar la orden.", code: ERRORS.BAD_REQUEST })
             }
 
             for (let p of productsAvailableForPurchase) {
@@ -215,14 +175,7 @@ export default class CartsController {
             res.status(200).json({ ticket, productsUnavailableForPurchase })
 
         } catch (error) {
-            console.log(error);
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json(
-                {
-                    error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                    detalle: `${error.message}`
-                }
-            )
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
     }
 }

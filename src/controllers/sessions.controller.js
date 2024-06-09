@@ -1,5 +1,7 @@
 import passport from 'passport';
 import UserDTO from '../dao/dto/UserDTO.js';
+import { ERRORS } from "../utils/EErrors.js"
+import CustomError from "../utils/CustomError.js"
 
 export default class SessionsController {
 
@@ -19,10 +21,7 @@ export default class SessionsController {
                 return res.redirect(`/signup?mensaje=Registro exitoso para ${user.last_name}`)
             })(req, res);
         } catch (error) {
-            res.status(500).json({
-                error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                detalle: `${error.message}`
-            });
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
     };
 
@@ -45,10 +44,7 @@ export default class SessionsController {
                 });
             })(req, res, next);
         } catch (error) {
-            res.status(500).json({
-                error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                detalle: `${error.message}`
-            });
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
     };
 
@@ -66,14 +62,7 @@ export default class SessionsController {
     static async logout(req, res) {
         req.session.destroy(e => {
             if (e) {
-                res.setHeader('Content-Type', 'application/json');
-                return res.status(500).json(
-                    {
-                        error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-                        detalle: `${e.message}`
-                    }
-                )
-
+                CustomError.createError({ name: 'Error', cause: e, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
             }
         })
 

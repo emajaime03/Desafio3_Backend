@@ -1,3 +1,6 @@
+import CustomError from "../utils/CustomError.js"
+import { ERRORS } from "../utils/EErrors.js"
+
 export const auth=(accesos=[])=>{
     return (req, res, next)=>{
         accesos=accesos.map(a=>a.toLowerCase())
@@ -7,13 +10,11 @@ export const auth=(accesos=[])=>{
         }
 
         if(!req.session.user || !req.session.user.rol){
-            res.setHeader('Content-Type','application/json');
-            return res.status(401).json({error:`No existen usuarios autenticados`})
+            CustomError.createError({name:"Unauthorized", cause: "No existen usuarios autenticados", message:"No existen usuarios autenticados", code: ERRORS.AUTENTICATION})
         }
 
         if(!accesos.includes(req.session.user.rol.toLowerCase())){
-            res.setHeader('Content-Type','application/json');
-            return res.status(403).json({error:`No tiene privilegios suficientes para acceder al recurso`})
+            CustomError.createError({name:"Forbidden", cause: "No tiene privilegios suficientes para acceder al recurso", message:"No tiene privilegios suficientes para acceder al recurso", code: ERRORS.AUTORIZATION})
         }
 
         next()

@@ -8,7 +8,7 @@ let usersDAO = new UsersDAO()
 let cartsDAO = new CartsDAO()
 
 // 1) Definir la funcion de configuracion
-export const inicializarPassport = () => {
+export const initializePassport = () => {
 
     passport.use(
         "register",
