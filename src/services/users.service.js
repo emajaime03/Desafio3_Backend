@@ -1,33 +1,33 @@
-import {UsersDAO} from "../dao/factory.js"
+import {UsersRepository} from "../dao/repository/factory.js"
 
 class UsersService{
-    constructor(dao){
-        this.UsersDAO= new dao()
+    constructor(repository){
+        this.UsersRepository= new repository()
     }
 
     async getAllUsers(){
-        return this.UsersDAO.getAll()
+        return this.UsersRepository.getAll()
     }
         
     async getUserById(id){
-        return await this.UsersDAO.getOneBy({_id:id})
+        return await this.UsersRepository.getOneBy({_id:id})
     }
     
     async getUserByEmail(email){
-        return await this.UsersDAO.getOneBy({email})
+        return await this.UsersRepository.getOneBy({email})
     }
 
-    async createUser(usuario){
-        return await this.UsersDAO.create(usuario)
+    async createUser(user){
+        return await this.UsersRepository.create(user)
     }
 
-    async update(id, modificacion = {}) {
-        return await this.UsersDAO.update(id, modificacion);
+    async update(id, modification = {}) {
+        return await this.UsersRepository.update(id, modification);
     }
 
     async delete(id) {
-        return await this.UsersDAO.delete(id);
+        return await this.UsersRepository.delete(id);
     }
 }
 
-export const usersService=new UsersService(UsersDAO)
+export const usersService=new UsersService(UsersRepository)

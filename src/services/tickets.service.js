@@ -1,14 +1,14 @@
-import { TicketsDAO } from "../dao/factory.js";
+import { TicketsRepository } from "../dao/repository/factory.js";
 
 class TicketsService{
 
-    constructor(dao){
-        this.TicketsDAO= new dao()
+    constructor(repository){
+        this.TicketsRepository= new repository()
     }
     
     async createTicket(ticket){
-        return await this.TicketsDAO.create(ticket)
+        return await this.TicketsRepository.create(ticket)
     }
 }
 
-export const ticketsService=new TicketsService(TicketsDAO)
+export const ticketsService=new TicketsService(TicketsRepository)

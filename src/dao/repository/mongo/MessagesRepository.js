@@ -1,6 +1,6 @@
-import {MessagesModel} from '../models/messages.model.js';
+import {MessagesModel} from '../../models/messages.model.js';
 
-export class MessagesMongoDAO {
+export class MessagesRepository {
 
     constructor(){}
 

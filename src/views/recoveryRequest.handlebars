@@ -1,0 +1,18 @@
+<h2>Recuperar contraseña:</h2>
+<hr>
+
+<form action="/api/sessions/recoveryRequest" method="post">
+
+    <div id="message"></div>
+
+    <input type="email" name="email" placeholder="Ingrese su email" id="email">
+    <br>
+    <input type="submit" value="Aceptar" id="submit">
+
+</form>
+
+
+{{>menu}}
+
+
+<script src="/js/recoveryRequest.js"></script>

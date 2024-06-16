@@ -4,7 +4,7 @@ const { Schema, ObjectId } = mongoose;
 const usersColl = "users"
 const usersSchema = new Schema(
     {
-        rol: String,
+        role: String,
         age: Number,
         first_name: String,
         last_name: String,

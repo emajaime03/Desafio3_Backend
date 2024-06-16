@@ -1,7 +1,7 @@
 let btnSubmit=document.getElementById("submit")
 let inputEmail=document.getElementById("email")
 let inputPassword=document.getElementById("password")
-let divMensaje=document.getElementById("mensaje")
+let divMessage=document.getElementById("message")
 
 btnSubmit.addEventListener("click", async(e)=>{
     e.preventDefault()
@@ -21,14 +21,14 @@ btnSubmit.addEventListener("click", async(e)=>{
     let status=resultado.status
     let datos=await resultado.json()
     if(status==200){
-        divMensaje.style.color="green"
-        divMensaje.innerHTML=datos.message
+        divMessage.style.color="green"
+        divMessage.innerHTML=datos.message
         if (datos.user) {
             window.location.href = '/profile';
         }
     }else{
-        divMensaje.style.color="red"
-        divMensaje.innerHTML=datos.error
+        divMessage.style.color="red"
+        divMessage.innerHTML=datos.error
     }
 
 })

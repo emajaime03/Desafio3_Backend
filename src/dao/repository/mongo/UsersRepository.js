@@ -1,6 +1,6 @@
-import { UsersModel } from "../models/users.model.js";
+import { UsersModel } from "../../models/users.model.js";
 
-export class UsersMongoDAO{
+export class UsersRepository{
 
     constructor(){}
     

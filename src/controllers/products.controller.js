@@ -29,7 +29,7 @@ export default class ProductsController {
 
             let data = await productsService.getAllProductsPaginate(limit, page, sort, status, category)
             res.setHeader('Content-Type', 'application/json')
-            res.status(200).json(data)
+            return res.status(200).json(data)
         } catch (error) {
             CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
@@ -46,7 +46,7 @@ export default class ProductsController {
 
             let product = await productsService.getProductById(id)
             res.setHeader('Content-Type', 'application/json')
-            res.status(200).json({ product })
+            return res.status(200).json({ product })
         } catch (error) {
             CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
@@ -68,8 +68,7 @@ export default class ProductsController {
                 CustomError.createError({ name: 'Error', cause: 'Producto ya existe', message: `Ya existe un producto con código ${code}`, code: ERRORS.BAD_REQUEST })
             }
 
-
-            let newProduct = await productsService.createProduct({ title, description, price, thumbnail, stock, category, code, status })
+            let newProduct = await productsService.createProduct({ title, description, price, thumbnail, stock, category, code, status, owner: req.session.user._id })
             res.setHeader('Content-Type', 'application/json');
             return res.status(200).json({ newProduct });
 
@@ -85,6 +84,22 @@ export default class ProductsController {
                 CustomError.createError({ name: 'Error', cause: invalidId(id), message: "El id ingresado no tiene el formato correcto", code: ERRORS.BAD_REQUEST })
             }
 
+            const products = await productsService.getAllProducts();
+
+            const product = products.find(p => p._id == id);
+
+            if (product === undefined) {
+                CustomError.createError({ name: 'Error', cause: 'Producto no encontrado', message: `No se encontró un producto con id ${id}`, code: ERRORS.BAD_REQUEST })
+            }
+
+            if(req.session.user.role !== 'admin'){
+                if(req.session.user.role !== 'premium'){
+                    CustomError.createError({ name: 'Error', cause: 'No tiene permisos', message: `No tiene permisos para realizar esta acción`, code: ERRORS.AUTORIZATION })
+                } else if(req.session.user._id !== product.owner._id.toString()){
+                    CustomError.createError({ name: 'Error', cause: 'No tiene permisos', message: `No tiene permisos para realizar esta acción`, code: ERRORS.AUTORIZATION })
+                }
+            }
+
             let modificacion = req.body
 
             let propiedadesValidasProduct = ["title", "description", "price", "thumbnail", "stock", "code", "status"]
@@ -97,18 +112,10 @@ export default class ProductsController {
                 CustomError.createError({ name: 'Error', cause: generateProductErrorInfo(), message: `Propiedades inválidas`, code: ERRORS.BAD_REQUEST })
             }
 
-            let products = await productsService.getAllProducts();
-
             if (modificacion.code) {
                 if (products.some(p => p.code === modificacion.code && p.id !== id)) {
                     CustomError.createError({ name: 'Error', cause: 'Codigo repetido', message: `Ya existe un producto con código ${modificacion.code}`, code: ERRORS.BAD_REQUEST })
                 }
-            }
-
-            const indiceProduct = products.findIndex(p => p._id == id);
-
-            if (indiceProduct === -1) {
-                CustomError.createError({ name: 'Error', cause: 'Producto no encontrado', message: `No se encontró un producto con id ${id}`, code: ERRORS.BAD_REQUEST })
             }
 
             let respuesta = await productsService.update(id, modificacion)
@@ -126,6 +133,20 @@ export default class ProductsController {
             if (!isValidObjectId(id)) {
                 CustomError.createError({ name: 'Error', cause: invalidId(id), message: "El id ingresado no tiene el formato correcto", code: ERRORS.BAD_REQUEST })
             }
+
+            const products = await productsService.getAllProducts();
+            const product = products.find(p => p._id == id);
+
+            if (product === undefined) {
+                CustomError.createError({ name: 'Error', cause: 'Producto no encontrado', message: `No se encontró un producto con id ${id}`, code: ERRORS.BAD_REQUEST })
+            } else if (req.session.user.role !== 'admin') {
+                if (req.session.user.role !== 'premium') {
+                    CustomError.createError({ name: 'Error', cause: 'No tiene permisos', message: `No tiene permisos para realizar esta acción`, code: ERRORS.AUTORIZATION })
+                } else if (req.session.user._id !== product.owner._id.toString()) {
+                    CustomError.createError({ name: 'Error', cause: 'No tiene permisos', message: `No tiene permisos para realizar esta acción`, code: ERRORS.AUTORIZATION })
+                }
+            }
+
             let respuesta = await productsService.delete(id)
             res.setHeader('Content-Type', 'application/json');
             return res.status(200).json({ respuesta });

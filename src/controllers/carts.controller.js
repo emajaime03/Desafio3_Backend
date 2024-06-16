@@ -6,7 +6,7 @@ import { ERRORS } from "../utils/EErrors.js"
 import CustomError from "../utils/CustomError.js"
 import { invalidId } from "../utils/info.js"
 import { generateAddProductCartErrorInfo, generateOrderErrorInfo } from '../utils/info.js'
-import { logger } from "../utils/logger.js"
+import { logger } from "../utils/Logger.js"
 
 export default class CartsController {
 
@@ -29,7 +29,7 @@ export default class CartsController {
 
             let cart = await cartsService.getCartById(cartId)
             res.setHeader('Content-Type', 'application/json')
-            res.status(200).json({ cart })
+            return res.status(200).json({ cart })
         } catch (error) {
             CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
@@ -47,21 +47,25 @@ export default class CartsController {
 
     static addProduct = async (req, res) => {
 
-        let cartId = req.params.cid
-        let productId = req.params.pid
-        if (!isValidObjectId(cartId) || !isValidObjectId(productId)) {
-            CustomError.createError({ name: 'Error', cause: invalidId(cartId), message: "El id ingresado no tiene el formato correcto", code: ERRORS.BAD_REQUEST })
-        }
-
-        let productExists = await productsService.getProductById(productId)
-
-        if (!productExists) {
-            CustomError.createError({ name: 'Error', cause: generateAddProductCartErrorInfo(), message: "El producto seleccionado no existe o no tiene stock suficiente.", code: ERRORS.BAD_REQUEST })
-        } else if (productExists.stock === 0) {
-            CustomError.createError({ name: 'Error', cause: generateAddProductCartErrorInfo(), message: "El producto seleccionado no tiene stock suficiente.", code: ERRORS.BAD_REQUEST })
-        } 
-
         try {
+            let cartId = req.params.cid
+            let productId = req.params.pid
+            if (!isValidObjectId(cartId) || !isValidObjectId(productId)) {
+                CustomError.createError({ name: 'Error', cause: invalidId(cartId), message: "El id ingresado no tiene el formato correcto", code: ERRORS.BAD_REQUEST })
+            }
+
+            let productExists = await productsService.getProductById(productId)
+
+            if (!productExists) {
+                CustomError.createError({ name: 'Error', cause: generateAddProductCartErrorInfo(), message: "El producto seleccionado no existe o no tiene stock suficiente.", code: ERRORS.BAD_REQUEST })
+            } else if (productExists.stock === 0) {
+                CustomError.createError({ name: 'Error', cause: generateAddProductCartErrorInfo(), message: "El producto seleccionado no tiene stock suficiente.", code: ERRORS.BAD_REQUEST })
+            }
+
+            if (productExists.owner._id.toString() === req.session.user._id) {
+                CustomError.createError({ name: 'Error', cause: "No puede agregar sus propios productos al carrito.", message: "No puedes agregar tus propios productos al carrito.", code: ERRORS.BAD_REQUEST })
+            }
+
             let cart = await cartsService.getCartById(cartId)
 
             if (!cart) {
@@ -82,7 +86,7 @@ export default class CartsController {
 
             let newCart = await cartsService.updateCart(cartId, cart)
             res.setHeader('Content-Type', 'application/json')
-            res.status(200).json({ newCart })
+            return res.status(200).json({ newCart })
         } catch (error) {
             CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
@@ -105,7 +109,7 @@ export default class CartsController {
 
             let newCart = await cartsService.updateCart(cartId, cart)
             res.setHeader('Content-Type', 'application/json')
-            res.status(200).json({ newCart })
+            return res.status(200).json({ newCart })
         } catch (error) {
             CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
@@ -127,7 +131,7 @@ export default class CartsController {
             cart.products = []
             cart = await cartsService.updateCart(cartId, cart)
             res.setHeader('Content-Type', 'application/json')
-            res.status(200).json({ cart })
+            return res.status(200).json({ cart })
         } catch (error) {
             CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
@@ -174,8 +178,8 @@ export default class CartsController {
             let ticket = await ticketsService.createTicket(newTicket)
             logger.info(`Compra exitosa para ${req.user.username}`)
             res.setHeader('Content-Type', 'application/json')
-            res.status(200).json({ ticket, productsUnavailableForPurchase })
-
+            return res.status(200).json({ ticket, productsUnavailableForPurchase })
+            
         } catch (error) {
             CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }

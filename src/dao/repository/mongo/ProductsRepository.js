@@ -1,6 +1,6 @@
-import {ProductsModel} from '../models/products.model.js';
+import {ProductsModel} from '../../models/products.model.js';
 
-export class ProductsMongoDAO {
+export class ProductsRepository {
 
     constructor(){}
     
@@ -27,7 +27,7 @@ export class ProductsMongoDAO {
     }
 
     async getOneBy(filter) {
-        return await ProductsModel.findOne(filter).lean();   
+        return await ProductsModel.findOne(filter).populate('owner').lean();   
     }
 
     async create(product) {

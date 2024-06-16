@@ -1,17 +1,17 @@
-import {MessagesDAO} from "../dao/factory.js"
+import {MessagesRepository} from "../dao/repository/factory.js"
 
 class MessagesService {
-    constructor(dao) {
-        this.MessagesDAO = new dao()
+    constructor(repository) {
+        this.MessagesRepository = new repository()
     }
 
     async getAllMessages() {
-        return await this.MessagesDAO.getAll()
+        return await this.MessagesRepository.getAll()
     }
 
     async createMessage(user, message) {
-        return await this.MessagesDAO.create(user, message)
+        return await this.MessagesRepository.create(user, message)
     }
 }
 
-export const messagesService = new MessagesService(MessagesDAO)
+export const messagesService = new MessagesService(MessagesRepository)

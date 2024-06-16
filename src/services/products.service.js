@@ -1,43 +1,43 @@
-import {ProductsDAO} from "../dao/factory.js"
+import {ProductsRepository} from "../dao/repository/factory.js"
 
 class ProductsService {
-    constructor(dao) {
-        this.ProductsDAO = new dao()
+    constructor(repository) {
+        this.ProductsRepository = new repository()
     }
 
     async getAllProductsPaginate(limit = 5, page = 1, sort = 'desc', status = 'true', category) {
         let productsPaginate
         if (!category) {
-            productsPaginate = this.ProductsDAO.getAllPaginate({status:status}, { limit, page, sort: {price: sort}, lean: true })
+            productsPaginate = this.ProductsRepository.getAllPaginate({status:status}, { limit, page, sort: {price: sort}, lean: true })
         } else {
-            productsPaginate = this.ProductsDAO.getAllPaginate({ status:status, category:category }, { limit, page, sort: {price: sort}, lean: true })
+            productsPaginate = this.ProductsRepository.getAllPaginate({ status:status, category:category }, { limit, page, sort: {price: sort}, lean: true })
         }
         return productsPaginate
     }
 
     async getAllProducts() {
-        return await this.ProductsDAO.getAll()
+        return await this.ProductsRepository.getAll()
     }
 
     async getProductById(id) {
-        return await this.ProductsDAO.getOneBy({ _id: id })
+        return await this.ProductsRepository.getOneBy({ _id: id })
     }
 
     async getProductByCode(code) {
-        return await this.ProductsDAO.getOneBy({ code })
+        return await this.ProductsRepository.getOneBy({ code })
     }
 
     async createProduct(product) {
-        return await this.ProductsDAO.create(product)
+        return await this.ProductsRepository.create(product)
     }
 
     async update(id, modificacion = {}) {
-        return await this.ProductsDAO.update(id, modificacion);
+        return await this.ProductsRepository.update(id, modificacion);
     }
 
     async delete(id) {
-        return await this.ProductsDAO.delete(id);
+        return await this.ProductsRepository.delete(id);
     }
 }
 
-export const productsService = new ProductsService(ProductsDAO)
+export const productsService = new ProductsService(ProductsRepository)

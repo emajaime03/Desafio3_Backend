@@ -22,7 +22,7 @@ export default class MockingController {
             }
 
             res.setHeader('Content-Type', 'application/json')
-            res.status(200).json({mockingProducts})
+            return res.status(200).json({mockingProducts})
         } catch (error) {
             CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })            
         }

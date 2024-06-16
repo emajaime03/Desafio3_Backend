@@ -8,7 +8,9 @@ export const config={
     general:{
         PORT: process.env.PORT||3000,
         SECRET: process.env.SECRET,
-        MODE: process.env.MODE
+        MODE: process.env.MODE,
+        EMAIL: process.env.EMAIL,
+        EMAIL_PASS: process.env.EMAIL_PASS
     },
     db:{
         PERSISTANCE: process.env.PERSISTANCE,

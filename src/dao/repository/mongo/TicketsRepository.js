@@ -1,6 +1,6 @@
-import { TicketsModel } from "../models/tickets.model.js";
+import { TicketsModel } from "../../models/tickets.model.js";
 
-export class TicketsMongoDAO{
+export class TicketsRepository{
 
     constructor(){}
     

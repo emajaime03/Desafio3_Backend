@@ -1,4 +1,3 @@
-import { isValidObjectId } from "mongoose"
 import { messagesService } from "../services/messages.service.js"
 import { ERRORS } from "../utils/EErrors.js"
 import CustomError from "../utils/CustomError.js"
@@ -11,7 +10,7 @@ export default class MessagesController {
             let messages = await messagesService.getAllMessages()
 
             res.setHeader('Content-Type', 'application/json')
-            res.status(200).json(messages)
+            return res.status(200).json(messages)
         } catch (error) {
             CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
         }
@@ -29,7 +28,7 @@ export default class MessagesController {
 
             let userMessage = await messagesService.createMessage(user, message)
             res.setHeader('Content-Type', 'application/json')
-            res.status(201).json(userMessage)
+            return res.status(201).json(userMessage)
         } catch (error) {
             CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })         
         }

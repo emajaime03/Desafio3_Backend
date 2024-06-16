@@ -9,6 +9,7 @@ import { router as sessionsRouter } from './routes/sessions.router.js';
 import { router as viewsRouter } from './routes/views.router.js';
 import { router as messagesRouter } from './routes/messages.router.js';
 import { router as mockingRouter } from './routes/mocking.router.js';
+import { router as usersRouter } from './routes/users.router.js';
 import handlebars from 'express-handlebars';
 import { Server } from 'socket.io';
 import session from 'express-session';
@@ -62,6 +63,7 @@ app.use(passport.initialize())
 app.use(passport.session()) // solo si estamos usando sesiones
 
 app.use("/", viewsRouter)
+app.use("/api/users", usersRouter)
 app.use("/api/sessions", sessionsRouter)
 app.use("/api/messages", messagesRouter)
 app.use("/api/products", (req, res, next) => {
@@ -69,6 +71,16 @@ app.use("/api/products", (req, res, next) => {
     next()
 }, productsRouter)
 app.use("/api/carts", cartsRouter)
+
+app.get('/loggerTest', (req, res) => {
+    logger.debug('Debug message');
+    logger.http('HTTP message');
+    logger.info('Info message');
+    logger.warning('Warning message');
+    logger.error('Error message');
+    logger.fatal('Fatal message');
+    return res.send('Logging test completed');
+});
 
 app.use("/", mockingRouter)
 

@@ -9,11 +9,11 @@ export const auth=(accesos=[])=>{
             return next()
         }
 
-        if(!req.session.user || !req.session.user.rol){
+        if(!req.session.user || !req.session.user.role){
             CustomError.createError({name:"Unauthorized", cause: "No existen usuarios autenticados", message:"No existen usuarios autenticados", code: ERRORS.AUTENTICATION})            
         }
 
-        if(!accesos.includes(req.session.user.rol.toLowerCase())){
+        if(!accesos.includes(req.session.user.role.toLowerCase())){
             CustomError.createError({name:"Forbidden", cause: "No tiene privilegios suficientes para acceder al recurso", message:"No tiene privilegios suficientes para acceder al recurso", code: ERRORS.AUTORIZATION})
         }
 

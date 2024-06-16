@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
+const { Schema, ObjectId } = mongoose;
 
 const productsColl = "products"
-const productsSchema = new mongoose.Schema({
+const productsSchema = new Schema({
     title: String,
     description: String,
     price: Number,
@@ -17,9 +18,14 @@ const productsSchema = new mongoose.Schema({
     status: {
         type: Boolean,
         default: true
+    },
+    owner: {
+        type: ObjectId,
+        ref: "users",
+        required: true
     }
-},{
-    timestamps: true, strict:false
+}, {
+    timestamps: true, strict: false
 });
 
 productsSchema.plugin(paginate);

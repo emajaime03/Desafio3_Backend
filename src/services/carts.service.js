@@ -1,29 +1,29 @@
-import {CartsDAO} from "../dao/factory.js"
+import {CartsRepository} from "../dao/repository/factory.js"
 
 class CartsService{
-    constructor(dao){
-        this.CartsDAO= new dao()
+    constructor(repository){
+        this.CartsRepository= new repository()
     }
 
     async getAllCarts(){
-        return this.CartsDAO.getAll()
+        return this.CartsRepository.getAll()
     }
         
     async getCartById(id){
-        return await this.CartsDAO.getOneByPopulate({_id:id})
+        return await this.CartsRepository.getOneByPopulate({_id:id})
     }
 
     async createCart(){
-        return await this.CartsDAO.create()
+        return await this.CartsRepository.create()
     }
 
     async updateCart(id, cart) {
-        return await this.CartsDAO.update(id, cart); 
+        return await this.CartsRepository.update(id, cart); 
     }
 
     async deleteAllProducts(id) {
-        return await this.CartsDAO.delete(id);
+        return await this.CartsRepository.delete(id);
     }
 }
 
-export const cartsService=new CartsService(CartsDAO)
+export const cartsService=new CartsService(CartsRepository)

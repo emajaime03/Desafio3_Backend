@@ -1,6 +1,6 @@
-import { CartsModel } from '../models/carts.model.js';
+import { CartsModel } from '../../models/carts.model.js';
 
-export class CartsMongoDAO {
+export class CartsRepository {
 
     constructor(){}
 

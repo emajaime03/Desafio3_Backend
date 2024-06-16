@@ -8,6 +8,9 @@ export const router=Router()
 
 router.post('/signup', checklogin, auth(["public"]), SessionsController.signup);
 router.post('/login', checklogin, auth(["public"]), SessionsController.login);
+router.post('/recoveryRequest', auth(["public"]), SessionsController.recoveryRequest);
+router.post('/recoveryReset', auth(["public"]), SessionsController.recoveryReset);
+router.get('/recoveryVerify', auth(["public"]), SessionsController.recoveryVerify);
 router.get('/current', checklogin, auth(["public"]), SessionsController.getCurrentSession);
 router.get('/logout', auth(["public"]), SessionsController.logout);
 router.get('/github', checklogin, auth(["public"]), passport.authenticate('github', {}), async (req,res)=>{});

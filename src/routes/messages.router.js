@@ -4,5 +4,5 @@ import {auth} from '../middlewares/auth.js'
 
 export const router = Router();
 
-router.get("/", auth(["user"]), MessagesController.getAllMessages);
-router.post("/", auth(["user"]), MessagesController.createMessage);
+router.get("/", auth(["user", "premium"]), MessagesController.getAllMessages);
+router.post("/", auth(["user", "premium"]), MessagesController.createMessage);
