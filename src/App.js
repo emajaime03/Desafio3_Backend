@@ -1,7 +1,8 @@
 import __dirname from './utils.js';
 import path from 'path';
 import express from 'express';
-import mongoose from 'mongoose';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUI from 'swagger-ui-express';
 import { config } from './config/config.js';
 import { router as productsRouter } from './routes/products.router.js';
 import { router as cartsRouter } from './routes/carts.router.js';
@@ -41,6 +42,20 @@ io.on("connection", async socket => {
     })
 })
 
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Ecommerce',
+            version: '1.0.0',
+            description: 'Documentación del proyecto Ecommerce'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+}
+
+const spec = swaggerJSDoc(swaggerOptions)
+
 app.use(middLogg)
 
 app.engine("handlebars", handlebars.engine())
@@ -71,6 +86,9 @@ app.use("/api/products", (req, res, next) => {
     next()
 }, productsRouter)
 app.use("/api/carts", cartsRouter)
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(spec))
+
+app.use("/", mockingRouter)
 
 app.get('/loggerTest', (req, res) => {
     logger.debug('Debug message');
@@ -81,8 +99,6 @@ app.get('/loggerTest', (req, res) => {
     logger.fatal('Fatal message');
     return res.send('Logging test completed');
 });
-
-app.use("/", mockingRouter)
 
 app.use((req, res, next) => {
     CustomError.createError({ name: 'Error', cause: 'Ruta incorrecta', message: `Página no encontrada`, code: ERRORS.NOT_FOUND })

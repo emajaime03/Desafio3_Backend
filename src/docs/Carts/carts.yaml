@@ -1,0 +1,157 @@
+paths:
+  /api/carts/{id}:
+    get:
+      summary: "Obtener carrito por ID"
+      tags:
+        - Carts
+      description: "Devuelve un carrito de compras único según su ID."
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID del carrito de compras a devolver"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Operación exitosa"
+          schema:
+            $ref: "#/components/schemas/Cart"
+        400:
+          description: "Entrada inválida"
+        500:
+          description: "Error al obtener el carrito"
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: "Agregar producto al carrito"
+      tags:
+        - Carts
+      description: "Agrega un producto al carrito especificado."
+      parameters:
+        - name: "cid"
+          in: "path"
+          description: "ID del carrito al que se agregará el producto"
+          required: true
+          type: "string"
+        - name: "pid"
+          in: "path"
+          description: "ID del producto que se agregará al carrito"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Operación exitosa"
+          schema:
+            $ref: "#/components/schemas/Cart"
+        400:
+          description: "Entrada inválida"
+        500:
+          description: "Error al agregar el producto al carrito"
+    put:
+      summary: "Actualizar un producto existente"
+      tags:
+        - Carts
+      parameters:
+        - name: "pid"
+          in: "path"
+          required: true
+          description: "ID del carrito a actualizar"
+          schema:
+            type: "string"
+        - name: "cid"
+          in: path
+          required: true
+          description: "ID del producto a actualizar"
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateProductFromCart"
+      responses:
+        200:
+          description: "Producto actualizado correctamente"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        400:
+          description: "Entrada inválida"
+        500:
+          description: "Error al actualizar el producto"
+    delete:
+      summary: "Eliminar producto del carrito"
+      tags:
+        - Carts
+      description: "Elimina un producto del carrito especificado."
+      parameters:
+        - name: "cid"
+          in: "path"
+          description: "ID del carrito que contiene el producto"
+          required: true
+          type: "string"
+        - name: "pid"
+          in: "path"
+          description: "ID del producto a eliminar del carrito"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Operación exitosa"
+        400:
+          description: "Entrada inválida"
+        500:
+          description: "Error al eliminar el producto del carrito"
+  /api/carts/{id}/:
+    delete:
+      summary: "Vaciar carrito"
+      tags:
+        - Carts
+      description: "Elimina todos los elementos del carrito especificado, dejándolo vacío."
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID del carrito a vaciar"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Operación exitosa - Carrito vaciado"
+        400:
+          description: "Entrada inválida"
+        500:
+          description: "Error al vaciar el carrito"
+components:
+  schemas: 
+    Cart:
+      type: "object"
+      properties:
+        _id:
+          type: "string"
+          example: "60f801d08ed8560012345678"
+        product:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/CartItem"
+    CartItem:
+      type: "object"
+      properties:
+        product:
+          type: "string"
+          example: "60f801d08ed8560012345679"
+        quantity:
+          type: "integer"
+          format: "int32"
+          example: 2
+  requestBodies:
+    updateProductFromCart:
+      type: object
+      properties:
+        quantity:
+          type: "integer"
+          format: "int32"
+          description: "Nueva cantidad del producto en el carrito"
+          example: 3
+      required:
+        - quantity
