@@ -176,7 +176,7 @@ export default class CartsController {
             }
 
             let ticket = await ticketsService.createTicket(newTicket)
-            logger.info(`Compra exitosa para ${req.user.username}`)
+            logger.info(`Compra exitosa para ${req.session.user.last_name}`)
             res.setHeader('Content-Type', 'application/json')
             return res.status(200).json({ ticket, productsUnavailableForPurchase })
             
