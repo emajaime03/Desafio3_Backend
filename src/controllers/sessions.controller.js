@@ -47,6 +47,8 @@ export default class SessionsController {
                         return res.status(500).json({ error: err.message, success: false });
                     }
                     req.session.user = user
+                    user.last_connection = new Date();
+                    usersService.update(user._id, { last_connection: user.last_connection })
                     logger.info(`Login exitoso para ${user.last_name}`)
                     return res.status(200).json({ message: "Login exitoso", user, success: true });
                 });
@@ -167,6 +169,8 @@ export default class SessionsController {
                     CustomError.createError({ name: 'Error', cause: e, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
                 }
             })
+            user.last_connection = new Date();
+            usersService.update(user._id, { last_connection: user.last_connection })
             logger.info(`Logout exitoso para ${user.last_name}`)
             res.setHeader('Content-Type', 'application/json');
             return res.redirect('/login')

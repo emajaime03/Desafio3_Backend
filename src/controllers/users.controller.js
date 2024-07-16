@@ -68,6 +68,28 @@ export default class UsersController {
         }
     }
 
+    static uploadDocuments = async (req, res) => {
+        try {
+            const { uid } = req.params;
+            const user = await usersService.getUserById(uid);
+            if (!user) {
+                CustomError.createError({ name: 'Error', cause: invalidId(uid), message: "El usuario no existe", code: ERRORS.BAD_REQUEST })
+            }
+
+            const files = req.files.map(file => ({
+                name: file.originalname,
+                reference: file.path
+            }));
+
+            user.documents = files;
+    
+            const response = await usersService.update(user._id, user);
+            return res.status(200).json({ response:response ,success: true, message: "Documentos subidos con éxito" });
+        } catch (error) {
+            CustomError.createError({ name: 'Error', cause: error, message: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, code: ERRORS.INTERNAL_SERVER_ERROR })
+        }
+    }
+
     static deleteUserById = async (req, res) => {
         try {
             let id = req.params.uid

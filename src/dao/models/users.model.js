@@ -17,6 +17,11 @@ const usersSchema = new Schema(
             required: true,
             ref: "carts"
         },
+        documents:[{
+            name: String,
+            reference: String
+        }],
+        last_connection: Date,
     },
     {
         timestamps: true, strict: false
