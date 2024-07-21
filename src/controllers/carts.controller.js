@@ -7,6 +7,7 @@ import CustomError from "../utils/CustomError.js"
 import { invalidId } from "../utils/info.js"
 import { generateAddProductCartErrorInfo, generateOrderErrorInfo } from '../utils/info.js'
 import { logger } from "../utils/Logger.js"
+import { sendMail } from '../utils.js';
 
 export default class CartsController {
 
@@ -149,6 +150,10 @@ export default class CartsController {
                 CustomError.createError({ name: 'Error', cause: 'No se encontró ningún carrito con ese ID', message: "No se encontró ningún carrito con ese ID", code: ERRORS.BAD_REQUEST })
             }
 
+            if (cart.products.length === 0) {
+                CustomError.createError({ name: 'Error', cause: 'No hay productos en el carrito', message: "No hay productos en el carrito", code: ERRORS.BAD_REQUEST })
+            }
+
             let productsAvailableForPurchase = cart.products.filter(p => p.product.stock >= p.quantity)
 
             let productsUnavailableForPurchase = cart.products.filter(p => p.product.stock < p.quantity)
@@ -159,7 +164,7 @@ export default class CartsController {
 
             for (let p of productsAvailableForPurchase) {
                 p.product.stock -= p.quantity
-                await productsService.update(p._id, p)
+                await productsService.update(p.product._id, p.product)
             }
 
             if (productsUnavailableForPurchase.length === 0) {
@@ -176,6 +181,7 @@ export default class CartsController {
             }
 
             let ticket = await ticketsService.createTicket(newTicket)
+            await sendMail(req.session.user.email, 'Compra exitosa', `Compra exitosa, su código de compra es: ${ticket.code}`);
             logger.info(`Compra exitosa para ${req.session.user.last_name}`)
             res.setHeader('Content-Type', 'application/json')
             return res.status(200).json({ ticket, productsUnavailableForPurchase })

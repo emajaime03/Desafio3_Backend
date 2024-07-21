@@ -1,3 +1,4 @@
+import e from "express";
 import { ERRORS } from "../utils/EErrors.js";
 import { logger } from "../utils/Logger.js";
 
@@ -23,5 +24,5 @@ export default (error, req, res, next)=>{
         default:
             logger.error(errorDetail)
     }
-    return res.status(error.code).json({message: error.message})
+    return res.redirect(`/?mensaje=${error.message}&status=error`)
 }

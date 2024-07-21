@@ -46,6 +46,7 @@ export default class SessionsController {
                         logger.error(err.message)
                         return res.status(500).json({ error: err.message, success: false });
                     }
+                    delete user.password // eliminar datos confidenciales...
                     req.session.user = user
                     user.last_connection = new Date();
                     usersService.update(user._id, { last_connection: user.last_connection })
@@ -161,8 +162,7 @@ export default class SessionsController {
         try {
             let user = req.session.user
             if (!user) {
-                logger.error("No hay una sesión activa")
-                return res.status(400).json({ error: "No hay una sesión activa" });
+                CustomError.createError({ name: 'Error', cause: "No hay una sesión activa", message: `No hay una sesión activa`, code: ERRORS.BAD_REQUEST })
             }
             req.session.destroy(e => {
                 if (e) {

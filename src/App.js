@@ -22,7 +22,6 @@ import errorHandler from './middlewares/errorHandler.js';
 import { ERRORS } from './utils/EErrors.js';
 import { logger, middLogg } from './utils/Logger.js';
 import "express-async-errors"
-
 const PORT = config.general.PORT;
 
 const app = express()
@@ -70,7 +69,7 @@ app.use(session(
     {
         secret: config.general.SECRET,
         resave: true, saveUninitialized: true,
-        store: MongoStore.create({ mongoUrl: `${config.db.MONGO_URL}&dbname=${config.db.DB_NAME}`, ttl: 60 })
+        store: MongoStore.create({ mongoUrl: `${config.db.MONGO_URL}&dbname=${config.db.DB_NAME}`, ttl: 24 * 60 * 60 })
     }
 ))
 initializePassport()
@@ -81,10 +80,7 @@ app.use("/", viewsRouter)
 app.use("/api/users", usersRouter)
 app.use("/api/sessions", sessionsRouter)
 app.use("/api/messages", messagesRouter)
-app.use("/api/products", (req, res, next) => {
-    req.io = io
-    next()
-}, productsRouter)
+app.use("/api/products", productsRouter)
 app.use("/api/carts", cartsRouter)
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(spec))
 

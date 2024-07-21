@@ -10,16 +10,14 @@ document.getElementById('productList').addEventListener('click', (event) => {
         const productId = btnAgregar.getAttribute('data-id');
         if (!cartId) {
             window.location.href = '/login';
-        } else {
-            
+        } else {            
             const url = `/api/carts/${cartId}/product/${productId}`;
-            console.log(url)
             fetch(url, {
                 method: 'POST'
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Ocurrió un error al agregar el producto al carrito');
+                        alert('Ocurrió un error al agregar el producto al carrito');
                     }
                     return response.json();
                 })
@@ -42,7 +40,7 @@ function listProducts(url){
     fetch(url)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Ocurrió un error al obtener los productos');
+                alert('Ocurrió un error al obtener los productos');
             }
             return response.json();
         })

@@ -21,10 +21,8 @@ btnSubmit.addEventListener("click", async(e)=>{
     let status=resultado.status
     let datos=await resultado.json()
     if(status==200){
-        divMessage.style.color="green"
-        divMessage.innerHTML=datos.message
         if (datos.user) {
-            window.location.href = '/profile';
+            window.location.href = `/?mensaje=${datos.message}`;
         }
     }else{
         divMessage.style.color="red"

@@ -11,16 +11,13 @@ btnPurchase.addEventListener('click', () => {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Ocurrió un error al realizar la compra');
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
+        alert("Compra realizada con éxito")
         window.location.reload();
     })
     .catch(error => {
+        alert("No se pudo realizar la compra")
         console.error(error);
     });
 });
@@ -30,7 +27,7 @@ function listProducts(url){
     fetch(url)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Ocurrió un error al obtener los productos');
+                alert('Ocurrió un error al obtener los productos');
             }
             return response.json();
         })
@@ -73,7 +70,7 @@ function listProducts(url){
                     })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('Ocurrió un error al eliminar el producto');
+                            alert('Ocurrió un error al eliminar el producto');
                         }
                         return response.json();
                     })
